@@ -1,5 +1,3 @@
-import { UserRequest } from './user-request.model';
-
 export class User {
   _id!: number;
 
@@ -19,13 +17,13 @@ export class User {
 
   point?: number;
 
-  accountType?: string;
+  requestUpgrade?: boolean;
 
   createdAt!: Date;
 
   updatedAt!: Date;
 
-  iat!: number;
+  iat?: number;
 
-  exp!: number;
+  exp?: number;
 }

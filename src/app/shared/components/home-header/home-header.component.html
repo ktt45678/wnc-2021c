@@ -1,51 +1,67 @@
 <div class="relative">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10">
-      <div class="flex justify-start lg:w-0 lg:flex-1">
-        <a routerLink="/">
-          <span class="sr-only">Morgan</span>
-          <img class="h-8 w-auto sm:h-10" src="assets/img/logo.svg" alt="Morgan">
-        </a>
-      </div>
-      <div class="-mr-2 -my-2 md:hidden">
-        <button mat-icon-button aria-label="Open mobile navbar" (click)="isNavOpen = true">
-          <mat-icon>menu</mat-icon>
-        </button>
-      </div>
-      <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-        <a routerLink="/auth/sign-in" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-          Đăng nhập
-        </a>
-      </div>
-    </div>
-  </div>
-  <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-10"
-    [ngClass]="isNavOpen ? 'block' : 'hidden'">
-    <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
-      <div class="pt-5 pb-6 px-5">
-        <div class="flex items-center justify-between">
-          <div>
-            <img class="h-8 w-auto" src="assets/img/logo.svg" alt="Workflow">
-          </div>
-          <div class="-mr-2">
-            <button mat-icon-button aria-label="Close mobile navbar" (click)="isNavOpen = false">
-              <mat-icon>close</mat-icon>
-            </button>
-          </div>
+  <ng-container *ngrxLet="user$ as user">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex justify-between items-center border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10">
+        <div class="flex justify-start lg:w-0 lg:flex-1">
+          <a routerLink="/">
+            <span class="sr-only">Morgan</span>
+            <img class="h-8 w-auto sm:h-10" src="assets/img/logo.svg" alt="Morgan">
+          </a>
         </div>
-      </div>
-      <div class="py-6 px-5 space-y-6">
-        <div>
-          <a mat-flat-button color="primary" class="w-full flex items-center justify-center px-4 py-2"
-            routerLink="/auth/sign-in">Đăng nhập</a>
-          <p class="mt-6 text-center text-base font-medium text-gray-500">
-            Chưa có tài khoản?
-            <a routerLink="/auth/sign-up" class="text-indigo-600 hover:text-indigo-500">
-              Đăng ký
+        <div class="-mr-2 -my-2 md:hidden">
+          <button mat-icon-button aria-label="Open mobile navbar" (click)="isNavOpen = true">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+        <div class="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
+          <a *ngIf="!user; else userLoggedIn" routerLink="/auth/sign-in"
+            class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+            Đăng nhập
+          </a>
+          <ng-template #userLoggedIn>
+            <a [routerLink]="" (click)="onSignOut()"
+              class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+              Đăng xuất ({{ user?.fullName || 'Người dùng' }})
             </a>
-          </p>
+          </ng-template>
         </div>
       </div>
     </div>
-  </div>
+    <div class="absolute top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden z-10"
+      [ngClass]="isNavOpen ? 'block' : 'hidden'">
+      <div class="rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white divide-y-2 divide-gray-50">
+        <div class="pt-5 pb-6 px-5">
+          <div class="flex items-center justify-between">
+            <div>
+              <img class="h-8 w-auto" src="assets/img/logo.svg" alt="Workflow">
+            </div>
+            <div class="-mr-2">
+              <button mat-icon-button aria-label="Close mobile navbar" (click)="isNavOpen = false">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="py-6 px-5 space-y-6">
+          <div *ngIf="!user; else userLoggedInMobile">
+            <a mat-flat-button color="primary" class="w-full flex items-center justify-center px-4 py-2"
+              routerLink="/auth/sign-in">Đăng nhập</a>
+            <p class="mt-6 text-center text-base font-medium text-gray-500">
+              Chưa có tài khoản?
+              <a routerLink="/auth/sign-up" class="text-indigo-600 hover:text-indigo-500">
+                Đăng ký
+              </a>
+            </p>
+          </div>
+          <ng-template #userLoggedInMobile>
+            <div>
+              <a mat-flat-button color="primary" class="w-full flex items-center justify-center px-4 py-2"
+                [routerLink]="" (click)="onSignOut()">Đăng xuất</a>
+              <p class="mt-6 text-center text-base font-medium text-gray-500">{{ user?.fullName || 'Người dùng' }}</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </ng-container>
 </div>

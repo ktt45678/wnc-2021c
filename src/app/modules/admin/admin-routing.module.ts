@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeLayoutComponent } from '../../shared/layouts/home-layout/home-layout.component';
+import { AdminLayoutComponent } from '../../shared/layouts/admin-layout/admin-layout.component';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
@@ -9,7 +9,7 @@ import { ProductsComponent } from './pages/products/products.component';
 const routes: Routes = [
   {
     path: '',
-    component: HomeLayoutComponent,
+    component: AdminLayoutComponent,
     children: [
       {
         path: '',

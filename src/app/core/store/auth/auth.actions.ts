@@ -23,8 +23,7 @@ export const signUp = createAction(
 );
 
 export const signUpSuccess = createAction(
-  '[Auth] Sign Up Success',
-  props<{ tokens: Jwt, user: User | null }>()
+  '[Auth] Sign Up Success'
 );
 
 export const signUpFailure = createAction(

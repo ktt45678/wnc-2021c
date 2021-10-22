@@ -1,8 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
+import jwt_decode from 'jwt-decode';
 
 import { signIn, signInSuccess, signInFailure, signUp, signUpFailure, signUpSuccess, signOut, signOutFailure, signOutSuccess, sendConfirmationEmail, sendConfirmationEmailSuccess, sendConfirmationEmailFailure, confirmEmail, confirmEmailSuccess, confirmEmailFailure, recoverPassword, recoverPasswordSuccess, recoverPasswordFailure, resetPassword, resetPasswordSuccess, resetPasswordFailure, refreshTokenFailure, refreshToken, refreshTokenSuccess } from './auth.actions';
 import { StoreStatus } from '../../enums/store-status.enum';
-import { User } from '../../models/user.model';
+import { User } from '../../models';
 
 export interface AuthState {
   signInStatus: StoreStatus;
@@ -29,7 +30,7 @@ export const initialState: AuthState = {
   refreshTokenStatus: StoreStatus.INIT,
   accessToken: localStorage.getItem('accessToken'),
   refreshToken: localStorage.getItem('refreshToken'),
-  user: null
+  user: localStorage.getItem('accessToken') ? jwt_decode(localStorage.getItem('accessToken') || '') : null
 };
 
 export const authReducer = createReducer(
@@ -57,17 +58,10 @@ export const authReducer = createReducer(
     ...state,
     signUpStatus: StoreStatus.LOADING
   })),
-  on(signUpSuccess, (state, action) => {
-    localStorage.setItem('accessToken', action.tokens.accessToken);
-    localStorage.setItem('refreshToken', action.tokens.refreshToken);
-    return {
-      ...state,
-      signUpStatus: StoreStatus.SUCCESS,
-      accessToken: action.tokens.accessToken,
-      refreshToken: action.tokens.refreshToken,
-      user: action.user
-    };
-  }),
+  on(signUpSuccess, (state) => ({
+    ...state,
+    signUpStatus: StoreStatus.SUCCESS
+  })),
   on(signUpFailure, (state) => ({
     ...state,
     signUpStatus: StoreStatus.FAILURE
@@ -157,11 +151,14 @@ export const authReducer = createReducer(
     localStorage.removeItem('refreshToken');
     return {
       ...state,
-      signUpStatus: StoreStatus.SUCCESS
+      signOutStatus: StoreStatus.SUCCESS,
+      accessToken: null,
+      refreshToken: null,
+      user: null
     };
   }),
   on(signOutFailure, (state) => ({
     ...state,
-    signUpStatus: StoreStatus.FAILURE
+    signOutStatus: StoreStatus.FAILURE
   }))
 );

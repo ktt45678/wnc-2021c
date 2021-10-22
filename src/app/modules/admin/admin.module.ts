@@ -7,6 +7,7 @@ import { AddCategoryComponent } from './dialogs/add-category/add-category.compon
 import { UpdateCategoryComponent } from './dialogs/update-category/update-category.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layout.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ProductsComponent } from './pages/products/products.component';
   ],
   imports: [
     CommonModule,
-    AdminRoutingModule
+    AdminRoutingModule,
+    AdminLayoutModule
   ]
 })
 export class AdminModule { }

@@ -4,11 +4,12 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import jwt_decode from 'jwt-decode';
 
 import { User } from '../../models';
 import { signIn, signInSuccess, signInFailure, signOut, signOutSuccess, signOutFailure, signUp, signUpSuccess, signUpFailure, sendConfirmationEmail, sendConfirmationEmailFailure, sendConfirmationEmailSuccess, confirmEmail, confirmEmailFailure, confirmEmailSuccess, recoverPassword, recoverPasswordSuccess, recoverPasswordFailure, resetPassword, resetPasswordSuccess, resetPasswordFailure, refreshToken, refreshTokenSuccess, refreshTokenFailure } from '.';
 import { AuthService } from '../../services/auth.service';
-import { JwtService } from '../../services/jwt.service';
+import { Role } from '../../enums/role.enum';
 
 @Injectable()
 export class AuthEffects {
@@ -18,9 +19,11 @@ export class AuthEffects {
       switchMap(action =>
         this.authService.signIn(action.email, action.password).pipe(
           map(data => {
-            const user = this.jwtService.decodeToken<User>(data.accessToken);
+            const user = jwt_decode<User>(data.accessToken);
             if (!user?.activated)
               this.router.navigate(['/auth/confirm-email']);
+            else if (user.role === Role.ADMIN)
+              this.router.navigate(['/admin']);
             else
               this.router.navigate(['/home']);
             return signInSuccess({ tokens: data, user: user });
@@ -36,9 +39,9 @@ export class AuthEffects {
       ofType(signUp),
       switchMap(action =>
         this.authService.signUp(action.fullName, action.email, action.birthdate, action.address, action.password, action.reCaptcha).pipe(
-          map(data => {
-            const user = this.jwtService.decodeToken<User>(data.accessToken);
-            return signUpSuccess({ tokens: data, user: user });
+          map(() => {
+            this.snackBar.open('Đăng ký thành công, hãy xác thực email của bạn', 'Đóng', { duration: 10000 });
+            return signUpSuccess();
           }),
           catchError(() => of(signUpFailure()))
         )
@@ -67,7 +70,7 @@ export class AuthEffects {
       switchMap(action =>
         this.authService.confirmEmail(action.id, action.code).pipe(
           map(data => {
-            const user = this.jwtService.decodeToken<User>(data.accessToken);
+            const user = jwt_decode<User>(data.accessToken);
             return confirmEmailSuccess({ tokens: data, user: user });
           }),
           catchError(() => of(confirmEmailFailure()))
@@ -106,7 +109,7 @@ export class AuthEffects {
       switchMap(action =>
         this.authService.refreshToken(action.token).pipe(
           map(data => {
-            const user = this.jwtService.decodeToken<User>(data.accessToken);
+            const user = jwt_decode<User>(data.accessToken);
             return refreshTokenSuccess({ tokens: data, user: user });
           }),
           catchError(() => {
@@ -133,6 +136,5 @@ export class AuthEffects {
     )
   );
 
-  constructor(private actions$: Actions, private authService: AuthService, private jwtService: JwtService, private router: Router,
-    private snackBar: MatSnackBar) { }
+  constructor(private actions$: Actions, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
 }
