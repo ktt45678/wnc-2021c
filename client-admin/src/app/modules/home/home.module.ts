@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 
 import { HomeRoutingModule } from './home-routing.module';
+import { HomeLayoutModule } from '../../shared/layouts/home-layout/home-layout.module';
 import { HomeComponent } from './pages/home/home.component';
 
 
@@ -13,6 +14,7 @@ import { HomeComponent } from './pages/home/home.component';
   imports: [
     CommonModule,
     HomeRoutingModule,
+    HomeLayoutModule,
     MatButtonModule
   ]
 })

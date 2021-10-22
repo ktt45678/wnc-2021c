@@ -1,0 +1,57 @@
+<div class="my-14">
+  <ng-container *ngrxLet="signInStatus$ as signInStatus">
+    <div class="container mx-auto">
+      <div class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden">
+        <div [ngClass]="signInStatus === StoreStatus.LOADING ? 'visible' : 'invisible'">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div class="p-8">
+          <h2 class="mb-8 text-center text-4xl font-medium uppercase">Đăng nhập</h2>
+          <form [formGroup]="signInForm" (ngSubmit)="onSignInSubmit()" formAutofocus>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Địa chỉ email</mat-label>
+              <input type="text" formControlName="email" matInput
+                [disabledControl]="signInStatus === StoreStatus.LOADING">
+              <mat-error *ngIf="signInForm.controls.email.errors?.required; else invalidEmail">
+                Địa chỉ email là <strong>bắt buộc</strong>
+              </mat-error>
+              <ng-template #invalidEmail>
+                <mat-error *ngIf="signInForm.controls.email.errors?.email">
+                  Địa chỉ email phải <strong>hợp lệ</strong>
+                </mat-error>
+              </ng-template>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Mật khẩu</mat-label>
+              <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput
+                [disabledControl]="signInStatus === StoreStatus.LOADING">
+              <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword"
+                [disabled]="signInStatus === StoreStatus.LOADING">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="signInForm.controls.password.errors?.required">
+                Mật khẩu là <strong>bắt buộc</strong>
+              </mat-error>
+            </mat-form-field>
+            <div class="mt-2">
+              <a routerLink="/auth/recover-password" mat-button color="primary"
+                [disabled]="signInStatus === StoreStatus.LOADING">Khôi phục mật
+                khẩu</a>
+            </div>
+            <div class="flex">
+              <div>
+                <a routerLink="/auth/sign-up" mat-button color="primary"
+                  [disabled]="signInStatus === StoreStatus.LOADING">Tạo tài khoản</a>
+              </div>
+              <div class="ml-auto">
+                <button type="submit" mat-flat-button color="primary"
+                  [disabled]="signInStatus === StoreStatus.LOADING">Đăng nhập</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

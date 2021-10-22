@@ -1,0 +1,146 @@
+<div class="my-14">
+  <ng-container *ngrxLet="signUpStatus$ as signUpStatus">
+    <div [ngSwitch]="signUpStatus" class="container mx-auto">
+      <div *ngSwitchDefault class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden">
+        <div [ngClass]="signUpStatus === StoreStatus.LOADING ? 'visible' : 'invisible'">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div class="p-8">
+          <h2 class="mb-8 text-center text-4xl font-medium uppercase">Tạo tài khoản</h2>
+          <form [formGroup]="signUpForm" (ngSubmit)="onSignUpSubmit()" formAutofocus>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Họ tên</mat-label>
+                <input type="text" formControlName="fullName" matInput
+                  [disabledControl]="signUpStatus === StoreStatus.LOADING">
+                <mat-hint>Sử dụng họ tên thật của bạn</mat-hint>
+                <mat-error *ngIf="signUpForm.controls.fullName.errors?.required; else fullNameMinLength">
+                  Họ tên là <strong>bắt buộc</strong>
+                </mat-error>
+                <ng-template #fullNameMinLength>
+                  <mat-error *ngIf="signUpForm.controls.fullName.errors?.minlength; else fullNameMaxLength">
+                    Họ tên phải <strong>ít nhất 3 kí tự</strong>
+                  </mat-error>
+                </ng-template>
+                <ng-template #fullNameMaxLength>
+                  <mat-error *ngIf="signUpForm.controls.fullName.errors?.maxlength">
+                    Họ tên <strong>không vượt quá 50 kí tự</strong>
+                  </mat-error>
+                </ng-template>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Ngày sinh</mat-label>
+                <input formControlName="birthdate" matInput [max]="maxBirthdate" [matDatepicker]="datePickerBirthdate"
+                  [disabledControl]="signUpStatus === StoreStatus.LOADING">
+                <mat-datepicker-toggle matSuffix [for]="datePickerBirthdate"></mat-datepicker-toggle>
+                <mat-datepicker #datePickerBirthdate></mat-datepicker>
+                <mat-error *ngIf="signUpForm.controls.birthdate.errors?.required">
+                  Ngày sinh phải <strong>hợp lệ</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Địa chỉ email</mat-label>
+              <input type="email" formControlName="email" matInput
+                [disabledControl]="signUpStatus === StoreStatus.LOADING">
+              <mat-hint>Email sẽ được dùng để xác minh tài khoản</mat-hint>
+              <mat-error *ngIf="signUpForm.controls.email.errors?.required; else invalidEmail">
+                Địa chỉ email là <strong>bắt buộc</strong>
+              </mat-error>
+              <ng-template #invalidEmail>
+                <mat-error *ngIf="signUpForm.controls.email.errors?.email">
+                  Địa chỉ email phải <strong>hợp lệ</strong>
+                </mat-error>
+              </ng-template>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Địa chỉ liên lạc</mat-label>
+              <input type="text" formControlName="address" matInput
+                [disabledControl]="signUpStatus === StoreStatus.LOADING">
+              <mat-hint>Vd: Số nhà, Ấp/Đường, Xã/Quận, Huyện, Tỉnh/Thành phố</mat-hint>
+              <mat-error *ngIf="signUpForm.controls.address.errors?.required; else addressMinLength">
+                Địa chỉ liên lạc là <strong>bắt buộc</strong>
+              </mat-error>
+              <ng-template #addressMinLength>
+                <mat-error *ngIf="signUpForm.controls.address.errors?.minlength; else addressMaxLength">
+                  Địa chỉ liên lạc phải <strong>ít nhất 3 kí tự</strong>
+                </mat-error>
+              </ng-template>
+              <ng-template #addressMaxLength>
+                <mat-error *ngIf="signUpForm.controls.address.errors?.maxlength">
+                  Địa chỉ liên lạc <strong>không vượt quá 200 kí tự</strong>
+                </mat-error>
+              </ng-template>
+            </mat-form-field>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Mật khẩu</mat-label>
+                <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput
+                  [disabledControl]="signUpStatus === StoreStatus.LOADING">
+                <button type="button" mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+                  [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword"
+                  [disabled]="signUpStatus === StoreStatus.LOADING">
+                  <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="signUpForm.controls.password.errors?.required; else passwordMinLength">
+                  Mật khẩu là <strong>bắt buộc</strong>
+                </mat-error>
+                <ng-template #passwordMinLength>
+                  <mat-error *ngIf="signUpForm.controls.password.errors?.minlength; else passwordMaxLength">
+                    Mật khẩu phải <strong>ít nhất 8 kí tự</strong>
+                  </mat-error>
+                </ng-template>
+                <ng-template #passwordMaxLength>
+                  <mat-error *ngIf="signUpForm.controls.password.errors?.maxlength; else passwordPattern">
+                    Mật khẩu <strong>không vượt quá 128 kí tự</strong>
+                  </mat-error>
+                </ng-template>
+                <ng-template #passwordPattern>
+                  <mat-error *ngIf="signUpForm.controls.password.errors?.pattern">
+                    Mật khẩu phải <strong>chứa ít nhất một chữ hoa, một chữ thường và một số</strong>
+                  </mat-error>
+                </ng-template>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Xác nhận mật khẩu</mat-label>
+                <input [type]="hidePassword ? 'password' : 'text'" formControlName="confirmPassword" matInput
+                  [disabledControl]="signUpStatus === StoreStatus.LOADING">
+                <mat-error *ngIf="signUpForm.controls.confirmPassword.errors?.required; else passwordMatches">
+                  Xác nhận mật khẩu là <strong>bắt buộc</strong>
+                </mat-error>
+                <ng-template #passwordMatches>
+                  <mat-error *ngIf="signUpForm.controls.confirmPassword.errors?.controlMatches">
+                    Mật khẩu phải <strong>trùng khớp</strong>
+                  </mat-error>
+                </ng-template>
+              </mat-form-field>
+            </div>
+            <div class="mt-2 flex">
+              <re-captcha class="m-auto" formControlName="reCaptcha"></re-captcha>
+            </div>
+            <div class="my-4 flex">
+              <p class="text-xs m-auto">Bằng cách đăng ký, bạn đồng ý với điều khoản sử dụng</p>
+            </div>
+            <div class="mt-2 flex">
+              <div>
+                <a routerLink="/auth/sign-in" mat-button color="primary"
+                  [disabled]="signUpStatus === StoreStatus.LOADING">Đăng nhập</a>
+              </div>
+              <div class="ml-auto">
+                <button type="submit" mat-flat-button color="primary"
+                  [disabled]="signUpStatus === StoreStatus.LOADING">Đăng ký</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div *ngSwitchCase="StoreStatus.SUCCESS" class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden">
+        <div class="p-8 text-center">
+          <h2 class="text-4xl font-medium uppercase">Đăng ký thành công</h2>
+          <p class="my-8 text-base">Vui lòng kiểm tra email của bạn để xác minh tài khoản.</p>
+          <a class="w-full" routerLink="/home" mat-flat-button color="primary">Trang chủ</a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

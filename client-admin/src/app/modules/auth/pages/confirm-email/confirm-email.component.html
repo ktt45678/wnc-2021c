@@ -1,0 +1,56 @@
+<div class="my-14">
+  <ng-container *ngIf="!hasCode; else confirmEmail">
+    <ng-container *ngrxLet="sendConfirmationEmailStatus$ as sendConfirmationEmailStatus">
+      <div class="container mx-auto">
+        <div class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden">
+          <div [ngClass]="sendConfirmationEmailStatus === StoreStatus.LOADING ? 'visible' : 'invisible'">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </div>
+          <div class="p-8">
+            <h2 class="mb-8 text-center text-4xl font-medium uppercase">Xác thực email</h2>
+            <form [formGroup]="sendConfirmationEmailForm" (ngSubmit)="onSendConfirmationEmail()" formAutofocus>
+              <div class="my-4 flex">
+                <p class="text-base text-center m-auto">Vui lòng xác thực email của bạn, nếu không nhận được liên kết
+                  xác thực, hãy thử gửi lại bằng cách ấn vào nút bên dưới</p>
+              </div>
+              <div class="my-4 flex">
+                <re-captcha class="m-auto" formControlName="reCaptcha"></re-captcha>
+              </div>
+              <div class="mt-2 flex">
+                <div>
+                  <a routerLink="/" mat-button color="primary"
+                    [disabled]="sendConfirmationEmailStatus === StoreStatus.LOADING">Trang chủ</a>
+                </div>
+                <div class="ml-auto">
+                  <button type="submit" mat-flat-button color="primary"
+                    [disabled]="sendConfirmationEmailStatus === StoreStatus.LOADING">Gửi liên kết xác thực</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #confirmEmail>
+    <ng-container *ngrxLet="confirmEmailStatus$ as confirmEmailStatus">
+      <div [ngSwitch]="confirmEmailStatus" class="container mx-auto">
+        <div *ngSwitchDefault class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden">
+          <div [ngClass]="confirmEmailStatus === StoreStatus.LOADING ? 'visible' : 'invisible'">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          </div>
+          <div class="p-8">
+            <h2 class="mb-8 text-center text-4xl font-medium uppercase">Xác nhận email</h2>
+          </div>
+        </div>
+        <div *ngSwitchCase="StoreStatus.SUCCESS" class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden">
+          <div class="p-8 text-center">
+            <h2 class="text-4xl font-medium uppercase">Xác nhận email thành công</h2>
+            <p class="my-8 text-base">Bạn đã có thể sử dụng các chức năng trong hệ thống.</p>
+            <a class="w-full" routerLink="/home" mat-flat-button color="primary">Trang chủ</a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</div>
