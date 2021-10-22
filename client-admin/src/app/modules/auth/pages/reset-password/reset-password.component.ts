@@ -20,6 +20,7 @@ import { controlMatches } from '../../../../core/validators/control-matches.vali
 })
 export class ResetPasswordComponent implements OnInit {
   StoreStatus = StoreStatus;
+  hidePassword: boolean = true;
   hasCode: boolean = false;
   id?: number;
   code?: string;
@@ -53,7 +54,7 @@ export class ResetPasswordComponent implements OnInit {
       }
     });
     this.recoverPasswordStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      if (status === StoreStatus.SUCCESS || status === StoreStatus.FAILURE)
+      if (status === StoreStatus.FAILURE)
         this.recoverPasswordForm.controls.reCaptcha?.reset();
     });
   }

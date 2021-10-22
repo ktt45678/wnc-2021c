@@ -43,7 +43,7 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit(): void {
     this.signUpStatus$.pipe(takeUntil(this._destroy)).subscribe(status => {
-      if (status === StoreStatus.FAILURE || status === StoreStatus.SUCCESS)
+      if (status === StoreStatus.FAILURE)
         this.signUpForm.controls.reCaptcha?.reset();
     });
   }
