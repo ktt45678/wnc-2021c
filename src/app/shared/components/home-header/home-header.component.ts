@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AppState } from '../../../core/store';
 import { User } from '../../../../app/core/models';
 import { signOut } from '../../../../app/core/store/auth';
+import { Role } from '../../../core/enums/role.enum';
 
 @Component({
   selector: 'app-home-header',
@@ -13,6 +14,7 @@ import { signOut } from '../../../../app/core/store/auth';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeHeaderComponent implements OnInit {
+  Role = Role;
 
   isNavOpen: boolean = false;
 

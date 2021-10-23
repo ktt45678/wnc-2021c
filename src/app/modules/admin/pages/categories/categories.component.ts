@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } fr
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
@@ -11,6 +12,8 @@ import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { AppState } from '../../../../core/store';
 import { Category, Paginated } from '../../../../core/models';
 import { destroyCategories, findAllCategories } from '../../../../core/store/category';
+import { CreateCategoryComponent } from '../../dialogs/create-category/create-category.component';
+import { UpdateCategoryComponent } from '../../dialogs/update-category/update-category.component';
 
 @Component({
   selector: 'app-categories',
@@ -24,18 +27,22 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  displayedColumns: string[] = ['_id', 'name', 'subName', 'createdAt', 'products'];
+  displayedColumns: string[] = ['_id', 'name', 'subName', 'createdAt', 'products', 'actions'];
   categoryDataSource?: MatTableDataSource<Category>;
   totalCategories?: number;
   defaultSort: Sort = { active: '_id', direction: 'asc' };
 
-  paginatedCategories$: Observable<Paginated<Category>>;
-  findAllCategoriesStatus$: Observable<StoreStatus>
+  categoryList$: Observable<Paginated<Category>>;
+  createCategoryStatus$: Observable<StoreStatus>;
+  updateCategoryStatus$: Observable<StoreStatus>;
+  removeCategoryStatus$: Observable<StoreStatus>;
 
-  constructor(private store: Store<AppState>, private destroyService: DestroyService) {
-    this.paginatedCategories$ = store.select(state => state.category.categoryList);
-    this.findAllCategoriesStatus$ = store.select(state => state.category.findAllCategoriesStatus);
-    this.paginatedCategories$.pipe(takeUntil(this.destroyService)).subscribe(paginatedCategory => {
+  constructor(private store: Store<AppState>, private dialog: MatDialog, private destroyService: DestroyService) {
+    this.categoryList$ = store.select(state => state.category.categoryList);
+    this.createCategoryStatus$ = store.select(state => state.category.createCategoryStatus);
+    this.updateCategoryStatus$ = store.select(state => state.category.updateCategoryStatus);
+    this.removeCategoryStatus$ = store.select(state => state.category.removeCategoryStatus);
+    this.categoryList$.pipe(takeUntil(this.destroyService)).subscribe(paginatedCategory => {
       this.initializeData(paginatedCategory.results);
       this.totalCategories = paginatedCategory.totalResults;
     });
@@ -52,6 +59,15 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
       tap(() => this.loadCategories()),
       takeUntil(this.destroyService)
     ).subscribe();
+    this.createCategoryStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
+      status === StoreStatus.SUCCESS && this.loadCategories();
+    });
+    this.updateCategoryStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
+      status === StoreStatus.SUCCESS && this.loadCategories();
+    });
+    this.removeCategoryStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
+      status === StoreStatus.SUCCESS && this.loadCategories();
+    });
   }
 
   ngOnDestroy(): void {
@@ -71,11 +87,20 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.categoryDataSource = new MatTableDataSource(categories);
   }
 
-  updateCategory(category: Category) {
-
+  createCategoryDialog() {
+    this.dialog.open(CreateCategoryComponent, {
+      width: '350px'
+    });
   }
 
-  removeCategory(category: Category) {
+  updateCategoryDialog(category: Category) {
+    this.dialog.open(UpdateCategoryComponent, {
+      width: '350px',
+      data: category
+    });
+  }
+
+  removeCategoryDialog(category: Category) {
 
   }
 

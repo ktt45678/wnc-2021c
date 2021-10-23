@@ -1,4 +1,4 @@
-export interface CreateCategory {
+export interface ICreateCategory {
   name: string;
   subName: string;
 }

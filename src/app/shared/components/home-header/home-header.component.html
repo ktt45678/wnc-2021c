@@ -19,10 +19,16 @@
             Đăng nhập
           </a>
           <ng-template #userLoggedIn>
-            <a [routerLink]="" (click)="onSignOut()"
-              class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-              Đăng xuất ({{ user?.fullName || 'Người dùng' }})
-            </a>
+            <div class="space-x-4">
+              <a *ngIf="user?.role === Role.ADMIN" routerLink="/admin"
+                class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                Quản trị
+              </a>
+              <a [routerLink]="" (click)="onSignOut()"
+                class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+                Đăng xuất ({{ user?.fullName || 'Người dùng' }})
+              </a>
+            </div>
           </ng-template>
         </div>
       </div>
@@ -33,7 +39,7 @@
         <div class="pt-5 pb-6 px-5">
           <div class="flex items-center justify-between">
             <div>
-              <img class="h-8 w-auto" src="assets/img/logo.svg" alt="Workflow">
+              <img class="h-8 w-auto" src="assets/img/logo.svg" alt="Morgan">
             </div>
             <div class="-mr-2">
               <button mat-icon-button aria-label="Close mobile navbar" (click)="isNavOpen = false">
@@ -55,8 +61,12 @@
           </div>
           <ng-template #userLoggedInMobile>
             <div>
-              <a mat-flat-button color="primary" class="w-full flex items-center justify-center px-4 py-2"
-                [routerLink]="" (click)="onSignOut()">Đăng xuất</a>
+              <div class="space-y-2">
+                <a mat-flat-button color="primary" class="w-full flex items-center justify-center px-4 py-2"
+                  *ngIf="user?.role === Role.ADMIN" routerLink="/admin">Quản trị</a>
+                <a mat-flat-button color="primary" class="w-full flex items-center justify-center px-4 py-2"
+                  [routerLink]="" (click)="onSignOut()">Đăng xuất</a>
+              </div>
               <p class="mt-6 text-center text-base font-medium text-gray-500">{{ user?.fullName || 'Người dùng' }}</p>
             </div>
           </ng-template>

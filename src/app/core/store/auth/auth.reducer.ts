@@ -151,6 +151,9 @@ export const authReducer = createReducer(
     localStorage.removeItem('refreshToken');
     return {
       ...initialState,
+      accessToken: null,
+      refreshToken: null,
+      user: null,
       signOutStatus: StoreStatus.SUCCESS
     };
   }),

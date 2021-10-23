@@ -11,10 +11,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { CategoriesComponent } from './pages/categories/categories.component';
-import { AddCategoryComponent } from './dialogs/add-category/add-category.component';
+import { CreateCategoryComponent } from './dialogs/create-category/create-category.component';
 import { UpdateCategoryComponent } from './dialogs/update-category/update-category.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
@@ -23,10 +24,10 @@ import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layou
 @NgModule({
   declarations: [
     CategoriesComponent,
-    AddCategoryComponent,
+    CreateCategoryComponent,
     UpdateCategoryComponent,
     UsersComponent,
-    ProductsComponent,
+    ProductsComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +43,8 @@ import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layou
     MatSelectModule,
     MatInputModule,
     MatIconModule,
-    MatMenuModule
+    MatMenuModule,
+    MatDialogModule
   ]
 })
 export class AdminModule { }

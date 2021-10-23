@@ -1,9 +1,15 @@
 <div class="mx-4 my-4 px-4 py-4 shadow bg-white rounded">
   <ng-container *ngIf="categoryDataSource">
-    <mat-form-field class="w-full md:w-auto">
-      <mat-label>Tìm kiếm</mat-label>
-      <input matInput #searchInput>
-    </mat-form-field>
+    <div class="flex flex-wrap">
+      <mat-form-field class="w-full md:w-auto">
+        <mat-label>Tìm kiếm</mat-label>
+        <input matInput #searchInput>
+      </mat-form-field>
+      <div class="w-full md:w-auto md:ml-auto">
+        <button class="w-full md:w-auto" (click)="createCategoryDialog()" mat-flat-button color="primary">Tạo danh
+          mục</button>
+      </div>
+    </div>
     <div class="overflow-x-auto">
       <table class="w-full" mat-table [dataSource]="categoryDataSource" matSort matSortDisableClear="true"
         [matSortActive]="defaultSort.active" [matSortDirection]="defaultSort.direction">
@@ -43,8 +49,10 @@
     <mat-menu #actionMenu="matMenu" xPosition="before">
       <ng-template matMenuContent let-element="element">
         <button [routerLink]="['view', element.id]" mat-menu-item>Xem chi tiết</button>
-        <button (click)="updateCategory(element)" [disabled]="!element.requestUpgrade" mat-menu-item>Cập nhật</button>
-        <button (click)="removeCategory(element)" [disabled]="!element.requestUpgrade" mat-menu-item>Xóa</button>
+        <button (click)="updateCategoryDialog(element)" mat-menu-item>Cập
+          nhật</button>
+        <button (click)="removeCategoryDialog(element)" [disabled]="element.products.length > 0"
+          mat-menu-item>Xóa</button>
       </ng-template>
     </mat-menu>
   </ng-container>

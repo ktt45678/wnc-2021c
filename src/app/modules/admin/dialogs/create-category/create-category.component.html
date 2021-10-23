@@ -1,14 +1,14 @@
-<h1 mat-dialog-title class="uppercase font-semibold" align="center">Cập nhật danh mục</h1>
+<h1 mat-dialog-title class="uppercase font-semibold" align="center">Tạo danh mục</h1>
 <div mat-dialog-content>
-  <div [formGroup]="updateCategoryForm">
+  <div [formGroup]="createCategoryForm">
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Tên cấp 1</mat-label>
       <input type="text" matInput formControlName="name">
-      <mat-error *ngIf="updateCategoryForm.controls.name.errors?.required; else nameMaxLength">
+      <mat-error *ngIf="createCategoryForm.controls.name.errors?.required; else nameMaxLength">
         Tên cấp 1 là <strong>bắt buộc</strong>
       </mat-error>
       <ng-template #nameMaxLength>
-        <mat-error *ngIf="updateCategoryForm.controls.name.errors?.maxlength">
+        <mat-error *ngIf="createCategoryForm.controls.name.errors?.maxlength">
           Tên cấp 1 <strong>không vượt quá 32 kí tự</strong>
         </mat-error>
       </ng-template>
@@ -16,11 +16,11 @@
     <mat-form-field appearance="outline" class="w-full">
       <mat-label>Tên cấp 2</mat-label>
       <input type="text" matInput formControlName="subName">
-      <mat-error *ngIf="updateCategoryForm.controls.subName.errors?.required; else subNameMaxLength">
+      <mat-error *ngIf="createCategoryForm.controls.subName.errors?.required; else subNameMaxLength">
         Tên cấp 2 là <strong>bắt buộc</strong>
       </mat-error>
       <ng-template #subNameMaxLength>
-        <mat-error *ngIf="updateCategoryForm.controls.subName.errors?.maxlength">
+        <mat-error *ngIf="createCategoryForm.controls.subName.errors?.maxlength">
           Tên cấp 2 <strong>không vượt quá 32 kí tự</strong>
         </mat-error>
       </ng-template>
@@ -29,5 +29,5 @@
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button (click)="onClose()">Hủy</button>
-  <button mat-button (click)="onUpdate()">Xác nhận</button>
+  <button mat-button (click)="onCreate()">Xác nhận</button>
 </div>

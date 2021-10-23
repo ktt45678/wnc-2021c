@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -12,7 +12,7 @@ import { Paginated, User } from '../../../../core/models';
 import { DestroyService } from '../../../../core/services/destroy.service';
 import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { Role } from '../../../../core/enums/role.enum';
-import { findAllUsers } from 'src/app/core/store/user';
+import { destroyUsers, findAllUsers } from 'src/app/core/store/user';
 
 @Component({
   selector: 'app-users',
@@ -20,7 +20,7 @@ import { findAllUsers } from 'src/app/core/store/user';
   styleUrls: ['./users.component.scss'],
   providers: [DestroyService]
 })
-export class UsersComponent implements OnInit, AfterViewInit {
+export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   StoreStatus = StoreStatus;
   Role = Role;
   @ViewChild(MatSort) sort!: MatSort;
@@ -57,6 +57,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
       tap(() => this.loadUsers()),
       takeUntil(this.destroyService)
     ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(destroyUsers());
   }
 
   private loadUsers(): void {
