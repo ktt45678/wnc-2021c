@@ -13,7 +13,7 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(findAllUsers),
       switchMap(action =>
-        this.usersService.findAll(action.page, action.limit, action.search, action.sort).pipe(
+        this.usersService.findAll(action.page, action.limit, action.search, action.sort, action.filter).pipe(
           map(data => findAllUsersSuccess({ payload: data })),
           catchError(() => of(findAllUsersFailure()))
         )

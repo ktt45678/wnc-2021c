@@ -1,11 +1,11 @@
 import { createAction, props } from '@ngrx/store';
 
 import { User, Paginated } from '../../models';
-import { IPaginate } from '../../interfaces/users';
+import { IPaginateUsers } from '../../interfaces/users';
 
 export const findAllUsers = createAction(
   '[Users] Find All Users',
-  props<IPaginate>()
+  props<IPaginateUsers>()
 );
 
 export const findAllUsersSuccess = createAction(

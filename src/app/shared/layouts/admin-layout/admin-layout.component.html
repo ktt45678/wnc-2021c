@@ -2,7 +2,7 @@
   <app-home-header></app-home-header>
 </header>
 <section>
-  <mat-sidenav-container class="h-screen">
+  <mat-sidenav-container class="min-h-screen">
     <mat-sidenav #sideNav mode="side" opened>
       <mat-nav-list>
         <a mat-list-item routerLink="/admin/users">
@@ -24,7 +24,7 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-      <button mat-icon-button color="primary" (click)="sideNav.toggle()">
+      <button mat-icon-button (click)="sideNav.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
       <router-outlet></router-outlet>

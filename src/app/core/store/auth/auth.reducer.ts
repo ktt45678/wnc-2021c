@@ -150,11 +150,8 @@ export const authReducer = createReducer(
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     return {
-      ...state,
-      signOutStatus: StoreStatus.SUCCESS,
-      accessToken: null,
-      refreshToken: null,
-      user: null
+      ...initialState,
+      signOutStatus: StoreStatus.SUCCESS
     };
   }),
   on(signOutFailure, (state) => ({

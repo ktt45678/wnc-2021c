@@ -6,12 +6,12 @@ import { destroyUsers, findAllUsers, findAllUsersFailure, findAllUsersSuccess } 
 
 export interface UserState {
   findAllUsersStatus: StoreStatus;
-  users: Paginated<User>
+  userList: Paginated<User>
 }
 
 export const initialState: UserState = {
   findAllUsersStatus: StoreStatus.INIT,
-  users: new Paginated<User>()
+  userList: new Paginated<User>()
 }
 
 export const userReducer = createReducer(
@@ -22,7 +22,7 @@ export const userReducer = createReducer(
   })),
   on(findAllUsersSuccess, (state, action) => ({
     ...state,
-    users: action.payload,
+    userList: action.payload,
     findAllUsersStatus: StoreStatus.SUCCESS
   })),
   on(findAllUsersFailure, (state) => ({
