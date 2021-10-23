@@ -14,6 +14,7 @@ import { Category, Paginated } from '../../../../core/models';
 import { destroyCategories, findAllCategories } from '../../../../core/store/category';
 import { CreateCategoryComponent } from '../../dialogs/create-category/create-category.component';
 import { UpdateCategoryComponent } from '../../dialogs/update-category/update-category.component';
+import { RemoveCategoryComponent } from '../../dialogs/remove-category/remove-category.component';
 
 @Component({
   selector: 'app-categories',
@@ -101,7 +102,10 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   removeCategoryDialog(category: Category) {
-
+    this.dialog.open(RemoveCategoryComponent, {
+      width: '350px',
+      data: category
+    });
   }
 
 }

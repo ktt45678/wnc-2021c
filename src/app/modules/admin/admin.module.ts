@@ -17,6 +17,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { CreateCategoryComponent } from './dialogs/create-category/create-category.component';
 import { UpdateCategoryComponent } from './dialogs/update-category/update-category.component';
+import { RemoveCategoryComponent } from './dialogs/remove-category/remove-category.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layout.module';
@@ -26,6 +27,7 @@ import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layou
     CategoriesComponent,
     CreateCategoryComponent,
     UpdateCategoryComponent,
+    RemoveCategoryComponent,
     UsersComponent,
     ProductsComponent
   ],
