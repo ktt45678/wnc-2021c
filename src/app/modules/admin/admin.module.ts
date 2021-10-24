@@ -21,6 +21,7 @@ import { RemoveCategoryComponent } from './dialogs/remove-category/remove-catego
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layout.module';
+import { ViewCategoryComponent } from './dialogs/view-category/view-category.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layou
     UpdateCategoryComponent,
     RemoveCategoryComponent,
     UsersComponent,
-    ProductsComponent
+    ProductsComponent,
+    ViewCategoryComponent
   ],
   imports: [
     CommonModule,

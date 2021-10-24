@@ -12,6 +12,7 @@ import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { AppState } from '../../../../core/store';
 import { Category, Paginated } from '../../../../core/models';
 import { destroyCategories, findAllCategories } from '../../../../core/store/category';
+import { ViewCategoryComponent } from '../../dialogs/view-category/view-category.component';
 import { CreateCategoryComponent } from '../../dialogs/create-category/create-category.component';
 import { UpdateCategoryComponent } from '../../dialogs/update-category/update-category.component';
 import { RemoveCategoryComponent } from '../../dialogs/remove-category/remove-category.component';
@@ -86,6 +87,13 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private initializeData(categories: Category[]): void {
     this.categoryDataSource = new MatTableDataSource(categories);
+  }
+
+  viewCategoryDialog(category: Category) {
+    this.dialog.open(ViewCategoryComponent, {
+      width: '350px',
+      data: category
+    });
   }
 
   createCategoryDialog() {

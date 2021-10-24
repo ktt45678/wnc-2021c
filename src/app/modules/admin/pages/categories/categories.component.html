@@ -48,7 +48,7 @@
     <mat-paginator [length]="totalCategories || 0" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
     <mat-menu #actionMenu="matMenu" xPosition="before">
       <ng-template matMenuContent let-element="element">
-        <button [routerLink]="['view', element.id]" mat-menu-item>Xem chi tiết</button>
+        <button (click)="viewCategoryDialog(element)" mat-menu-item>Xem chi tiết</button>
         <button (click)="updateCategoryDialog(element)" mat-menu-item>Cập
           nhật</button>
         <button (click)="removeCategoryDialog(element)" [disabled]="element.products.length > 0"

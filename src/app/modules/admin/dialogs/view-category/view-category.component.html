@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Xem danh mục</h1>
+<div mat-dialog-content>
+  <ng-container *ngIf="(findOneCategoryStatus$ | async) === StoreStatus.SUCCESS">
+    <ng-container *ngIf="(category$ | async) as category">
+      <p class="leading-relaxed">Danh mục: {{ category.name }} - {{ category.subName }}</p>
+      <p class="leading-relaxed">Ngày tạo: {{ category.createdAt | date:'dd/MM/yyyy hh:mm:ss' }}</p>
+      <p class="leading-relaxed">Ngày cập nhật: {{ category.createdAt | date:'dd/MM/yyyy hh:mm:ss' }}</p>
+      <p class="leading-relaxed">Số lượng sản phẩm: {{ category.products.length }}</p>
+    </ng-container>
+  </ng-container>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">Đóng</button>
+</div>
