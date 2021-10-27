@@ -19,4 +19,12 @@ export class UsersService {
     filter != null && (params.filter = filter);
     return this.http.get<Paginated<User>>('users', { params });
   }
+
+  findOne(id: number) {
+    return this.http.get<User>(`users/${id}`);
+  }
+
+  update(id: number, fullName?: string, email?: string, birthdate?: Date, address?: string, currentPassword?: string, password?: string, role?: string, canSellUntil?: Date) {
+    return this.http.patch<User>(`users/${id}`, { fullName, email, birthdate, address, currentPassword, password, role, canSellUntil });
+  }
 }

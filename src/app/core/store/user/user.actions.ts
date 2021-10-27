@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 
 import { User, Paginated } from '../../models';
-import { IPaginateUsers } from '../../interfaces/users';
+import { IPaginateUsers, IUpdateUser } from '../../interfaces/users';
 
 export const findAllUsers = createAction(
   '[Users] Find All Users',
@@ -15,6 +15,34 @@ export const findAllUsersSuccess = createAction(
 
 export const findAllUsersFailure = createAction(
   '[Users] Find All Users Failure'
+);
+
+export const findOneUser = createAction(
+  '[Users] Find One User',
+  props<{ id: number }>()
+);
+
+export const findOneUserSuccess = createAction(
+  '[Users] Find One User Success',
+  props<{ payload: User }>()
+);
+
+export const findOneUserFailure = createAction(
+  '[Users] Find One User Failure'
+);
+
+export const updateUser = createAction(
+  '[Users] Update User',
+  props<{ id: number } & IUpdateUser>()
+);
+
+export const updateUserSuccess = createAction(
+  '[Users] Update User Success',
+  props<{ payload: User }>()
+);
+
+export const updateUserFailure = createAction(
+  '[Users] Update User Failure'
 );
 
 export const destroyUsers = createAction(
