@@ -15,13 +15,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { CategoriesComponent } from './pages/categories/categories.component';
+import { ViewCategoryComponent } from './dialogs/view-category/view-category.component';
 import { CreateCategoryComponent } from './dialogs/create-category/create-category.component';
 import { UpdateCategoryComponent } from './dialogs/update-category/update-category.component';
 import { RemoveCategoryComponent } from './dialogs/remove-category/remove-category.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layout.module';
-import { ViewCategoryComponent } from './dialogs/view-category/view-category.component';
+import { RelativeTimeModule } from '../../core/pipes/relative-time';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ViewCategoryComponent } from './dialogs/view-category/view-category.com
     AdminLayoutModule,
     ReactiveFormsModule,
     ReactiveComponentModule,
+    RelativeTimeModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,

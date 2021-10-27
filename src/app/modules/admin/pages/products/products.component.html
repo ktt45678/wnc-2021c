@@ -1,1 +1,59 @@
-<p>products works!</p>
+<div class="mx-4 my-4 px-4 py-4 shadow bg-white rounded">
+  <ng-container *ngIf="productDataSource">
+    <div class="flex flex-wrap">
+      <mat-form-field class="w-full md:w-auto">
+        <mat-label>Tìm kiếm</mat-label>
+        <input matInput #searchInput>
+      </mat-form-field>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full" mat-table [dataSource]="productDataSource" matSort matSortDisableClear="true"
+        [matSortActive]="defaultSort.active" [matSortDirection]="defaultSort.direction">
+        <ng-container matColumnDef="_id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+          <td mat-cell *matCellDef="let element">{{ element._id }}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tên sản phẩm</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Danh mục</th>
+          <td mat-cell *matCellDef="let element">{{ element.category.name }} - {{ element.category.subName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="startingPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Giá khởi điểm</th>
+          <td mat-cell *matCellDef="let element">{{ element.startingPrice | currency:'VND' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="priceStep">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Bước giá</th>
+          <td mat-cell *matCellDef="let element">{{ element.priceStep | currency:'VND' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="buyPrice">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Giá mua ngay</th>
+          <td mat-cell *matCellDef="let element">{{ element.buyPrice ? (element.buyPrice | currency:'VND') : 'Không có'
+            }}</td>
+        </ng-container>
+        <ng-container matColumnDef="seller">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Người bán</th>
+          <td mat-cell *matCellDef="let element">{{ element.seller.fullName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="expiry">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kết thúc</th>
+          <td mat-cell *matCellDef="let element">{{ element.expiry | relativeTime:'259200000' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Tùy chọn</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button>
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    <mat-paginator [length]="totalProducts || 0" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
+  </ng-container>
+</div>
