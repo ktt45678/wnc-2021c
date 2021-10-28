@@ -1,0 +1,36 @@
+<div class="p-4 rounded shadow bg-gray-200">
+  <ng-container *ngIf="loading; else loadedProductList">
+    <mat-spinner class="block mx-auto"></mat-spinner>
+  </ng-container>
+  <ng-template #loadedProductList>
+    <ng-container *ngIf="!productList.length; else hasProducts">
+      <p class="text-center">Không có sản phẩm</p>
+    </ng-container>
+  </ng-template>
+  <ng-template #hasProducts>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <a *ngFor="let product of productList; index as i; trackBy: trackProduct"
+        [routerLink]="['/home', 'product', product._id]">
+        <mat-card>
+          <mat-card-header class="overflow-hidden">
+            <mat-card-title class="whitespace-nowrap">{{ product.name }}</mat-card-title>
+            <mat-card-subtitle class="whitespace-nowrap">{{ product.category.name }} - {{ product.category.subName }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <div class="my-2 aspect-w-1 aspect-h-1">
+            <img class="object-cover block !mx-auto" mat-card-image [src]="product.images[0]" [alt]="product.name"
+              loading="lazy">
+          </div>
+          <mat-card-content>
+            <p>Giá hiện tại: <strong>{{ product.displayPrice| currency:'VND' }}</strong></p>
+            <p>Đang thắng: <strong>{{ product.winner ? product.winner.fullName : 'Không có' }}</strong></p>
+            <p>Mua ngay: <strong>{{ product.buyPrice ? (product.buyPrice | currency:'VND') : 'Không có' }}</strong></p>
+            <p>Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong></p>
+            <p>Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong></p>
+            <p>Lượt ra giá: <strong>{{ product.bidCount }}</strong></p>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    </div>
+  </ng-template>
+</div>

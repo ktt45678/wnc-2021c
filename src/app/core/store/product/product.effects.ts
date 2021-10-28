@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { findAllProducts, findAllProductsSuccess, findAllProductsFailure, findOneProduct, findOneProductFailure, findOneProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, createProduct, createProductFailure, createProductSuccess, removeProduct, removeProductFailure, removeProductSuccess } from '.';
+import { findAllProducts, findAllProductsSuccess, findAllProductsFailure, findOneProduct, findOneProductFailure, findOneProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, createProduct, createProductFailure, createProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess } from '.';
 import { ProductsService } from '../../services/products.service';
 
 @Injectable()
@@ -73,6 +73,42 @@ export class ProductEffects {
             return removeProductSuccess();
           }),
           catchError(() => of(removeProductFailure()))
+        )
+      )
+    )
+  );
+
+  findTopEndProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findTopEndProducts),
+      switchMap(() =>
+        this.productsService.findAll(1, 5, undefined, 'asc(expiry)', undefined, false).pipe(
+          map(data => findTopEndProductsSuccess({ payload: data.results })),
+          catchError(() => of(findTopEndProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findTopBidProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findTopBidProducts),
+      switchMap(() =>
+        this.productsService.findAll(1, 5, undefined, 'desc(bidCount)', undefined, false).pipe(
+          map(data => findTopBidProductsSuccess({ payload: data.results })),
+          catchError(() => of(findTopBidProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findTopPriceProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findTopPriceProducts),
+      switchMap(() =>
+        this.productsService.findAll(1, 5, undefined, 'desc(displayPrice)', undefined, false).pipe(
+          map(data => findTopPriceProductsSuccess({ payload: data.results })),
+          catchError(() => of(findTopPriceProductsFailure()))
         )
       )
     )

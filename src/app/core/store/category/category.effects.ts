@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { findAllCategories, findAllCategoriesSuccess, findAllCategoriesFailure, findOneCategory, findOneCategoryFailure, findOneCategorySuccess, updateCategory, updateCategoryFailure, updateCategorySuccess, createCategory, createCategoryFailure, createCategorySuccess, removeCategory, removeCategoryFailure, removeCategorySuccess } from '.';
+import { findAllCategories, findAllCategoriesSuccess, findAllCategoriesFailure, findOneCategory, findOneCategoryFailure, findOneCategorySuccess, updateCategory, updateCategoryFailure, updateCategorySuccess, createCategory, createCategoryFailure, createCategorySuccess, removeCategory, removeCategoryFailure, removeCategorySuccess, findCategoryGroups, findCategoryGroupsSuccess, findCategoryGroupsFailure } from '.';
 import { CategoriesService } from '../../services/categories.service';
 
 @Injectable()
@@ -13,9 +13,21 @@ export class CategoryEffects {
     this.actions$.pipe(
       ofType(findAllCategories),
       switchMap(action =>
-        this.categoriesService.findAll(action.page, action.limit, action.search, action.sort).pipe(
+        this.categoriesService.findAll(action.page, action.limit, action.search, action.sort, 0).pipe(
           map(data => findAllCategoriesSuccess({ payload: data })),
           catchError(() => of(findAllCategoriesFailure()))
+        )
+      )
+    )
+  );
+
+  findCategoryGroups$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findCategoryGroups),
+      switchMap(action =>
+        this.categoriesService.findGroups().pipe(
+          map(data => findCategoryGroupsSuccess({ payload: data })),
+          catchError(() => of(findCategoryGroupsFailure()))
         )
       )
     )

@@ -2,7 +2,42 @@
   <app-home-header></app-home-header>
 </header>
 <section>
-  <router-outlet></router-outlet>
+  <mat-sidenav-container class="min-h-screen">
+    <mat-sidenav #sideNav mode="over">
+      <mat-nav-list *ngrxLet="findCategoryGroupsStatus$ as findCategoryGroupsStatus">
+        <ng-container *ngIf="findCategoryGroupsStatus === StoreStatus.LOADING; else categoryGroupsLoaded">
+          <mat-spinner></mat-spinner>
+        </ng-container>
+        <ng-template #categoryGroupsLoaded>
+          <ng-container *ngIf="findCategoryGroupsStatus === StoreStatus.SUCCESS">
+            <mat-expansion-panel class="mat-elevation-z0"
+              *ngFor="let group of (categoryGroups$ | async); index as i; trackBy: trackCategoryGroup">
+              <mat-expansion-panel-header>{{ group._id }}</mat-expansion-panel-header>
+              <mat-nav-list dense>
+                <a mat-list-item *ngFor="let child of group.children; index as j; trackBy: trackCategoryGroup"
+                  [routerLink]="['category', child._id]">
+                  <div mat-line>{{ child.name }}</div>
+                </a>
+              </mat-nav-list>
+            </mat-expansion-panel>
+          </ng-container>
+        </ng-template>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="flex">
+        <button mat-icon-button (click)="sideNav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <div class="ml-auto">
+          <a mat-icon-button routerLink="/home/search">
+            <mat-icon>search</mat-icon>
+          </a>
+        </div>
+      </div>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </section>
 <footer>
   <app-home-footer></app-home-footer>

@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 
-import { Category, Paginated } from '../../models';
+import { Category, CategoryGroup, Paginated } from '../../models';
 import { ICreateCategory, IPaginateCategories } from '../../interfaces/categories';
 
 export const findAllCategories = createAction(
@@ -15,6 +15,19 @@ export const findAllCategoriesSuccess = createAction(
 
 export const findAllCategoriesFailure = createAction(
   '[Categories] Find All Categories Failure'
+);
+
+export const findCategoryGroups = createAction(
+  '[Categories] Find Category Groups'
+);
+
+export const findCategoryGroupsSuccess = createAction(
+  '[Categories] Find Category Groups Success',
+  props<{ payload: CategoryGroup[] }>()
+);
+
+export const findCategoryGroupsFailure = createAction(
+  '[Categories] Find Category Groups Failure'
 );
 
 export const findOneCategory = createAction(

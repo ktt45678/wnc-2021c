@@ -75,3 +75,42 @@ export const removeProductFailure = createAction(
 export const destroyProducts = createAction(
   '[Products] Destroy Products'
 );
+
+export const findTopEndProducts = createAction(
+  '[Products] Find Top End Products'
+);
+
+export const findTopEndProductsSuccess = createAction(
+  '[Products] Find Top End Products Success',
+  props<{ payload: Product[] }>()
+);
+
+export const findTopEndProductsFailure = createAction(
+  '[Products] Find Top End Products Failure'
+);
+
+export const findTopBidProducts = createAction(
+  '[Products] Find Top Bid Products'
+);
+
+export const findTopBidProductsSuccess = createAction(
+  '[Products] Find Top Bid Products Success',
+  props<{ payload: Product[] }>()
+);
+
+export const findTopBidProductsFailure = createAction(
+  '[Products] Find Top Bid Products Failure'
+);
+
+export const findTopPriceProducts = createAction(
+  '[Products] Find Top Price Products'
+);
+
+export const findTopPriceProductsSuccess = createAction(
+  '[Products] Find Top Price Products Success',
+  props<{ payload: Product[] }>()
+);
+
+export const findTopPriceProductsFailure = createAction(
+  '[Products] Find Top Price Products Failure'
+);
