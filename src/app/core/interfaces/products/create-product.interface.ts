@@ -7,4 +7,5 @@ export interface ICreateProduct {
   buyPrice?: number;
   autoRenew: boolean;
   expiry: Date;
+  images: File[];
 }

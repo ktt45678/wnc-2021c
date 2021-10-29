@@ -1,0 +1,126 @@
+<div class="container mx-auto">
+  <div class="px-4 mx-4 my-14">
+    <ng-container *ngrxLet="createProductStatus$ as createProductStatus">
+      <div class="md:shadow-border mx-auto rounded overflow-hidden">
+        <div [ngClass]="createProductStatus === StoreStatus.LOADING ? 'visible' : 'invisible'">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div class="p-0 md:p-8">
+          <h2 class="mb-8 text-center text-4xl font-medium uppercase">Bán sản phẩm mới</h2>
+          <form [formGroup]="createProductForm" (ngSubmit)="onCreateProductSubmit()" formAutofocus>
+            <mat-form-field appearance="outline" class="w-full">
+              <mat-label>Tên sản phẩm</mat-label>
+              <input type="text" formControlName="name" matInput
+                [disabledControl]="createProductStatus === StoreStatus.LOADING">
+              <mat-error *ngIf="createProductForm.controls.name.errors?.required; else nameMaxLength">
+                Tên sản phẩm là <strong>bắt buộc</strong>
+              </mat-error>
+              <ng-template #nameMaxLength>
+                <mat-error *ngIf="createProductForm.controls.name.errors?.maxlength">
+                  Tên sản phẩm phải <strong>ít hơn 200 kí tự</strong>
+                </mat-error>
+              </ng-template>
+            </mat-form-field>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Giá khởi điểm</mat-label>
+                <input type="number" min="1000" max="100000000000" step="1000" formControlName="startingPrice" matInput
+                  [disabledControl]="createProductStatus === StoreStatus.LOADING">
+                <span matSuffix>đ</span>
+                <mat-error *ngIf="createProductForm.controls.startingPrice.errors?.required; else startingPriceMin">
+                  Giá khởi điểm là <strong>bắt buộc</strong>
+                </mat-error>
+                <ng-template #startingPriceMin>
+                  <mat-error *ngIf="createProductForm.controls.startingPrice.errors?.min; else startingPriceMax">
+                    Giá khởi điểm phải <strong>cao hơn đ1,000</strong>
+                  </mat-error>
+                </ng-template>
+                <ng-template #startingPriceMax>
+                  <mat-error *ngIf="createProductForm.controls.startingPrice.errors?.max">
+                    Giá khởi điểm phải <strong>thấp hơn đ100,000,000,000</strong>
+                  </mat-error>
+                </ng-template>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Bước giá</mat-label>
+                <input type="number" min="1000" max="100000000000" step="1000" formControlName="priceStep" matInput
+                  [disabledControl]="createProductStatus === StoreStatus.LOADING">
+                <span matSuffix>đ</span>
+                <mat-error *ngIf="createProductForm.controls.priceStep.errors?.required; else priceStepMin">
+                  Bước giá là <strong>bắt buộc</strong>
+                </mat-error>
+                <ng-template #priceStepMin>
+                  <mat-error *ngIf="createProductForm.controls.priceStep.errors?.min; else priceStepMax">
+                    Bước giá phải <strong>cao hơn đ1,000</strong>
+                  </mat-error>
+                </ng-template>
+                <ng-template #priceStepMax>
+                  <mat-error *ngIf="createProductForm.controls.priceStep.errors?.max">
+                    Bước giá phải <strong>thấp hơn đ100,000,000,000</strong>
+                  </mat-error>
+                </ng-template>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Giá mua ngay (Không bắt buộc)</mat-label>
+                <input type="number" min="1000" max="100000000000" step="1000" formControlName="buyPrice" matInput
+                  [disabledControl]="createProductStatus === StoreStatus.LOADING">
+                <span matSuffix>đ</span>
+                <mat-error *ngIf="createProductForm.controls.buyPrice.errors?.min; else buyPriceMax">
+                  Giá mua ngay phải <strong>cao hơn đ1,000</strong>
+                </mat-error>
+                <ng-template #buyPriceMax>
+                  <mat-error *ngIf="createProductForm.controls.buyPrice.errors?.max">
+                    Giá mua ngay phải <strong>thấp hơn đ100,000,000,000</strong>
+                  </mat-error>
+                </ng-template>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Danh mục</mat-label>
+                <mat-select formControlName="category">
+                  <mat-optgroup *ngFor="let group of (categoryGroups$ | async); index as i; trackBy: trackId"
+                    [label]="group._id">
+                    <mat-option *ngFor="let child of group.children; index as j; trackBy: trackId" [value]="child._id">
+                      {{child.name}}
+                    </mat-option>
+                  </mat-optgroup>
+                </mat-select>
+                <mat-error *ngIf="createProductForm.controls.category.errors?.required">
+                  Danh mục là <strong>bắt buộc</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="my-2">
+              <quill-editor formControlName="description"
+                placeholder="Nhập mô tả cho sản phẩm (từ 10 đến 100,000 kí tự)..." [styles]="{height: '450px'}"
+                [required]="true" [minLength]="10" [maxLength]="100000"
+                [disabledControl]="createProductStatus === StoreStatus.LOADING">
+              </quill-editor>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <mat-form-field appearance="outline">
+                <mat-label>Thời gian kết thúc</mat-label>
+                <input matInput type="datetime-local" formControlName="expiry" [min]="minExpiry"
+                  [disabledControl]="createProductStatus === StoreStatus.LOADING">
+                <mat-error *ngIf="createProductForm.controls.expiry.errors?.required">
+                  Thời gian kết thúc là <strong>bắt buộc</strong>
+                </mat-error>
+              </mat-form-field>
+              <div>
+                <label for="image-input">Hình ảnh (Đã chọn {{ createProductForm.value.images.length || 0 }})</label>
+                <input id="image-input" type="file" formControlName="imageInput" (change)="onFileChange($event)"
+                  accept=".png,.jpg,.gif" [disabledControl]="createProductStatus === StoreStatus.LOADING">
+              </div>
+            </div>
+            <div class="flex my-2">
+              <div class="ml-auto">
+                <mat-slide-toggle formControlName="autoRenew" class="mr-4">Tự động gia hạn</mat-slide-toggle>
+                <button type="submit" mat-flat-button color="primary"
+                  [disabled]="createProductStatus === StoreStatus.LOADING">Đăng sản phẩm</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

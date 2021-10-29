@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { destroyProducts, findTopBidProducts, findTopEndProducts, findTopPricePr
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
+export class HomeComponent implements AfterContentInit, OnDestroy {
   StoreStatus = StoreStatus;
 
   findTopEndProductsStatus$: Observable<StoreStatus>;
@@ -29,9 +29,6 @@ export class HomeComponent implements OnInit, AfterContentInit, OnDestroy {
     this.topEndProducts$ = store.select(state => state.product.topEndProducts);
     this.topBidProducts$ = store.select(state => state.product.topBidProducts);
     this.topPriceProducts$ = store.select(state => state.product.topPriceProducts);
-  }
-
-  ngOnInit(): void {
   }
 
   ngAfterContentInit(): void {

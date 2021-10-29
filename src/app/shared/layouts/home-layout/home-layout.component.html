@@ -5,6 +5,11 @@
   <mat-sidenav-container class="min-h-screen">
     <mat-sidenav #sideNav mode="over">
       <mat-nav-list *ngrxLet="findCategoryGroupsStatus$ as findCategoryGroupsStatus">
+        <div class="mx-2 mb-2">
+          <button mat-icon-button (click)="sideNav.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
         <ng-container *ngIf="findCategoryGroupsStatus === StoreStatus.LOADING; else categoryGroupsLoaded">
           <mat-spinner></mat-spinner>
         </ng-container>
@@ -15,8 +20,8 @@
               <mat-expansion-panel-header>{{ group._id }}</mat-expansion-panel-header>
               <mat-nav-list dense>
                 <a mat-list-item *ngFor="let child of group.children; index as j; trackBy: trackCategoryGroup"
-                  [routerLink]="['category', child._id]">
-                  <div mat-line>{{ child.name }}</div>
+                  routerLink="/home/find-products" [queryParams]="{ category: child._id}" (click)="sideNav.toggle()">
+                  <div mat-line>{{ child.name }} ({{ child.products.length }})</div>
                 </a>
               </mat-nav-list>
             </mat-expansion-panel>
@@ -25,14 +30,21 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-      <div class="flex">
-        <button mat-icon-button (click)="sideNav.toggle()">
+      <div class="flex mx-2 my-1">
+        <button mat-icon-button (click)="sideNav.toggle()" matTooltip="Xem danh mục">
           <mat-icon>menu</mat-icon>
         </button>
         <div class="ml-auto">
-          <a mat-icon-button routerLink="/home/search">
+          <a mat-icon-button routerLink="/home/find-products" matTooltip="Tìm kiếm">
             <mat-icon>search</mat-icon>
           </a>
+          <ng-container *ngrxLet="user$ as user">
+            <ng-container *ngIf="user && user.role === Role.SELLER">
+              <a mat-icon-button routerLink="/home/create-product" matTooltip="Bán sản phẩm">
+                <mat-icon>add</mat-icon>
+              </a>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
       <router-outlet></router-outlet>

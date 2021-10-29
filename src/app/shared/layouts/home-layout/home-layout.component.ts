@@ -4,8 +4,9 @@ import { Observable } from 'rxjs';
 
 import { DestroyService } from '../../../core/services/destroy.service';
 import { StoreStatus } from '../../../core/enums/store-status.enum';
+import { Role } from '../../../core/enums/role.enum';
 import { AppState } from '../../../core/store';
-import { CategoryGroup } from '../../../core/models';
+import { CategoryGroup, User } from '../../../core/models';
 import { destroyCategories, findCategoryGroups } from '../../../core/store/category';
 
 @Component({
@@ -16,13 +17,16 @@ import { destroyCategories, findCategoryGroups } from '../../../core/store/categ
 })
 export class HomeLayoutComponent implements OnInit, AfterContentInit, OnDestroy {
   StoreStatus = StoreStatus;
+  Role = Role;
 
   findCategoryGroupsStatus$: Observable<StoreStatus>;
   categoryGroups$: Observable<CategoryGroup[]>;
+  user$: Observable<User | null>;
 
   constructor(private store: Store<AppState>, private destroyService: DestroyService) {
     this.findCategoryGroupsStatus$ = store.select(state => state.category.findCategoryGroupsStatus);
     this.categoryGroups$ = store.select(state => state.category.categoryGroups);
+    this.user$ = store.select(state => state.auth.user);
   }
 
   ngOnInit(): void {

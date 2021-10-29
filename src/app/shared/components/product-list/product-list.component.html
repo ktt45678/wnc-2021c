@@ -10,7 +10,7 @@
   <ng-template #hasProducts>
     <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
       <a *ngFor="let product of productList; index as i; trackBy: trackProduct"
-        [routerLink]="['/home', 'product', product._id]">
+        [routerLink]="['/home', 'products', product._id]">
         <mat-card>
           <mat-card-header class="overflow-hidden">
             <mat-card-title class="whitespace-nowrap">{{ product.name }}</mat-card-title>
@@ -23,7 +23,7 @@
           </div>
           <mat-card-content>
             <p>Giá hiện tại: <strong>{{ product.displayPrice| currency:'VND' }}</strong></p>
-            <p>Đang thắng: <strong>{{ product.winner ? product.winner.fullName : 'Không có' }}</strong></p>
+            <p>Người thắng: <strong>{{ product.winner ? product.winner.fullName : 'Không có' }}</strong></p>
             <p>Mua ngay: <strong>{{ product.buyPrice ? (product.buyPrice | currency:'VND') : 'Không có' }}</strong></p>
             <p>Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong></p>
             <p>Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong></p>

@@ -37,7 +37,7 @@ export class ProductEffects {
     this.actions$.pipe(
       ofType(createProduct),
       switchMap(action =>
-        this.productsService.create(action.name, action.description, action.category, action.startingPrice, action.priceStep, action.autoRenew, action.expiry, action.buyPrice).pipe(
+        this.productsService.create(action.name, action.description, action.category, action.startingPrice, action.priceStep, action.autoRenew, action.expiry, action.images, action.buyPrice).pipe(
           map(data => {
             this.snackBar.open('Tạo sản phẩm thành công', 'Đóng', { duration: 10000 });
             return createProductSuccess({ payload: data });

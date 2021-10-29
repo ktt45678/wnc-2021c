@@ -1,0 +1,69 @@
+<div class="container mx-auto">
+  <div class="px-4 mx-4 my-14">
+    <ng-container *ngrxLet="findAllProductsStatus$ as findAllProductsStatus">
+      <div class="md:shadow-border mx-auto rounded overflow-hidden">
+        <div class="p-0 md:p-8">
+          <h2 class="mb-8 text-center text-4xl font-medium uppercase">Tìm sản phẩm</h2>
+          <form [formGroup]="findProductsForm" (ngSubmit)="onFindProductsSubmit()" formAutofocus>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              <mat-form-field appearance="outline" class="w-full col-span-1 sm:col-span-2">
+                <mat-label>Từ khóa</mat-label>
+                <input type="text" formControlName="search" matInput
+                  [disabledControl]="findAllProductsStatus === StoreStatus.LOADING">
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Danh mục</mat-label>
+                <mat-select formControlName="category">
+                  <mat-option>Không</mat-option>
+                  <mat-optgroup *ngFor="let group of (categoryGroups$ | async); index as i; trackBy: trackId"
+                    [label]="group._id">
+                    <mat-option *ngFor="let child of group.children; index as j; trackBy: trackId" [value]="child._id">
+                      {{ child.name }} ({{ child.products.length }})
+                    </mat-option>
+                  </mat-optgroup>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Sắp xếp</mat-label>
+                <mat-select formControlName="sort">
+                  <mat-option>Không</mat-option>
+                  <mat-option value="asc(displayPrice)">
+                    Giá tăng dần
+                  </mat-option>
+                  <mat-option value="desc(displayPrice)">
+                    Giá giảm dần
+                  </mat-option>
+                  <mat-option value="asc(expiry)">
+                    Thời gian kết thúc tăng dần
+                  </mat-option>
+                  <mat-option value="desc(expiry)">
+                    Thời gian kết thúc giảm dần
+                  </mat-option>
+                  <mat-option value="asc(name)">
+                    Tên tăng dần
+                  </mat-option>
+                  <mat-option value="desc(name)">
+                    Tên giảm dần
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="flex">
+              <div class="ml-auto">
+                <button type="submit" mat-flat-button color="primary"
+                  [disabled]="findAllProductsStatus === StoreStatus.LOADING">Tìm kiếm</button>
+              </div>
+            </div>
+          </form>
+          <div class="my-4" *ngrxLet="productList$ as productList">
+            <app-product-list [productList]="productList.results"
+              [loading]="findAllProductsStatus === StoreStatus.LOADING">
+            </app-product-list>
+            <mat-paginator [length]="productList.totalResults" [pageSize]="30" [pageSizeOptions]="[5, 10, 15, 30]">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

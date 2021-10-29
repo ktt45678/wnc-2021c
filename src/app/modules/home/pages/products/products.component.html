@@ -1,0 +1,58 @@
+<ng-container *ngrxLet="product$ as product">
+  <ng-container *ngIf="(findOneProductStatus$ | async) === StoreStatus.LOADING; else loadedProduct">
+    <mat-spinner class="block mx-auto"></mat-spinner>
+  </ng-container>
+  <ng-template #loadedProduct>
+    <ng-container *ngIf="product; else noProduct">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="sticky">
+          <mat-card class="mat-elevation-z0">
+            <mat-card-header>
+              <mat-card-title>{{ product.name }}</mat-card-title>
+              <mat-card-subtitle>{{ product.category.name }} - {{ product.category.subName }}
+              </mat-card-subtitle>
+            </mat-card-header>
+            <div class="my-2 aspect-w-1 aspect-h-1">
+              <img class="object-cover block !mx-auto" mat-card-image [src]="product.images[0]" [alt]="product.name"
+                loading="lazy">
+            </div>
+            <mat-card-content>
+              <p>Giá hiện tại: <strong>{{ product.displayPrice| currency:'VND' }}</strong></p>
+              <p>Người thắng: <strong>{{ product.winner ? product.winner.fullName : 'Không có' }}</strong></p>
+              <p>Mua ngay: <strong>{{ product.buyPrice ? (product.buyPrice | currency:'VND') : 'Không có' }}</strong>
+              </p>
+              <p>Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong></p>
+              <p>Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong></p>
+              <p>Lượt ra giá: <strong>{{ product.bidCount }}</strong></p>
+              <p>Được bán bởi: <strong>{{ product.seller.fullName }}</strong></p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="md:col-span-3">
+          <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+            <mat-tab label="Thông tin">
+              <div class="m-4 p-4 rounded bg-gray-200">
+                <quill-view-html [content]="product.description"></quill-view-html>
+              </div>
+            </mat-tab>
+            <mat-tab label="Hình ảnh">
+              <div class="m-4 p-4 rounded bg-gray-200">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div class="my-2 aspect-w-1 aspect-h-1"
+                    *ngFor="let image of product.images; index as i; trackBy: trackProduct">
+                    <img class="object-cover" [src]="image" [alt]="product.name" loading="lazy">
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Đấu giá">
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template #noProduct>
+    <p class="text-center">Không có sản phẩm</p>
+  </ng-template>
+</ng-container>

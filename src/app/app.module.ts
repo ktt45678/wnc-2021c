@@ -2,6 +2,7 @@ import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { QuillModule } from 'ngx-quill'
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StoreModule } from '@ngrx/store';
@@ -31,6 +32,7 @@ import { AuthService } from './core/services/auth.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    QuillModule.forRoot(),
     MatNativeDateModule,
     MatSnackBarModule,
     StoreModule.forRoot(reducers),
