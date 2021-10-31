@@ -48,3 +48,16 @@ export const updateUserFailure = createAction(
 export const destroyUsers = createAction(
   '[Users] Destroy Users'
 );
+
+export const findCurrentUser = createAction(
+  '[Users] Find Current User'
+);
+
+export const findCurrentUserSuccess = createAction(
+  '[Users] Find Current User Success',
+  props<{ payload: User }>()
+);
+
+export const findCurrentUserFailure = createAction(
+  '[Users] Find Current User Failure'
+);

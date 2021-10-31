@@ -10,6 +10,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
+import { SocketIoModule } from 'ngx-socket-io';
 import { RecaptchaSettings, RECAPTCHA_LANGUAGE, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 
 import { environment } from '../environments/environment';
@@ -41,6 +42,12 @@ import { AuthService } from './core/services/auth.service';
       maxAge: 25,
       logOnly: environment.production,
       autoPause: true
+    }),
+    SocketIoModule.forRoot({
+      url: environment.apiUrl,
+      options: {
+        transports: ['websocket']
+      }
     }),
     LoadingBarModule,
     LoadingBarRouterModule

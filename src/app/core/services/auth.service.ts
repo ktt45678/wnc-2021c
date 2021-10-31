@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { Socket } from 'ngx-socket-io';
 import jwt_decode from 'jwt-decode';
 
 import { Jwt } from '../models/jwt.model';
+import { IoEvent } from '../enums/io-event.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class AuthService {
 
   private refreshTokenTimeout: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private socket: Socket) { }
 
   signIn(email: string, password: string) {
     return this.http.post<Jwt>('auth/login', { email, password });
@@ -48,6 +50,9 @@ export class AuthService {
 
   signOut(token: string) {
     this.stopRefreshTokenTimer();
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken)
+      this.socket.emit(IoEvent.UNAUTHENTICATE, { accessToken });
     return this.http.post('auth/revoke-token', { token });
   }
 

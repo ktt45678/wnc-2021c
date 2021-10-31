@@ -17,6 +17,9 @@ export class Product {
   bidCount!: number;
   bids!: Bid[];
   blacklist!: User[];
+  whitelist!: User[];
+  requestedUsers!: User[];
+  ended!: boolean;
   expiry!: string;
   createdAt!: string;
   updatedAt!: string;

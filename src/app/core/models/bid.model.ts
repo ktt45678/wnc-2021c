@@ -4,5 +4,5 @@ export class Bid {
   _id!: number;
   bidder!: User;
   price!: number;
-  accepted!: boolean;
+  status!: string;
 }

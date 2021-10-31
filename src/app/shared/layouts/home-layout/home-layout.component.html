@@ -5,7 +5,7 @@
   <mat-sidenav-container class="min-h-screen">
     <mat-sidenav #sideNav mode="over">
       <mat-nav-list *ngrxLet="findCategoryGroupsStatus$ as findCategoryGroupsStatus">
-        <div class="mx-2 mb-2">
+        <div class="mx-2 my-2">
           <button mat-icon-button (click)="sideNav.toggle()">
             <mat-icon>menu</mat-icon>
           </button>
@@ -30,20 +30,40 @@
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-      <div class="flex mx-2 my-1">
+      <div class="flex mx-2 my-3">
         <button mat-icon-button (click)="sideNav.toggle()" matTooltip="Xem danh mục">
           <mat-icon>menu</mat-icon>
         </button>
         <div class="ml-auto">
-          <a mat-icon-button routerLink="/home/find-products" matTooltip="Tìm kiếm">
-            <mat-icon>search</mat-icon>
-          </a>
           <ng-container *ngrxLet="user$ as user">
-            <ng-container *ngIf="user && user.role === Role.SELLER">
-              <a mat-icon-button routerLink="/home/create-product" matTooltip="Bán sản phẩm">
-                <mat-icon>add</mat-icon>
+            <div class="space-x-2">
+              <ng-container *ngIf="user">
+                <button mat-icon-button matTooltip="Thông báo đấu giá" [matBadge]="notificationCount"
+                  matBadgeSize="small" matBadgeColor="warn" [matMenuTriggerFor]="notificationList"
+                  (onMenuOpen)="notificationCount = null">
+                  <mat-icon>notifications</mat-icon>
+                </button>
+                <mat-menu #notificationList="matMenu">
+                  <div class="p-2 m-2" *ngIf="!notifications.length; else hasNotifications">
+                    <p class="text-center">Không có thông báo mới</p>
+                  </div>
+                  <ng-template #hasNotifications>
+                    <a class="space-y-2" mat-menu-item *ngFor="let noti of notifications"
+                      [routerLink]="['/home', 'products', noti.product]">
+                      <span>{{ noti.content }}</span>
+                    </a>
+                  </ng-template>
+                </mat-menu>
+              </ng-container>
+              <a mat-icon-button routerLink="/home/find-products" matTooltip="Tìm kiếm">
+                <mat-icon>search</mat-icon>
               </a>
-            </ng-container>
+              <ng-container *ngIf="user && user.role === Role.SELLER">
+                <a mat-icon-button routerLink="/home/create-product" matTooltip="Bán sản phẩm">
+                  <mat-icon>add</mat-icon>
+                </a>
+              </ng-container>
+            </div>
           </ng-container>
         </div>
       </div>

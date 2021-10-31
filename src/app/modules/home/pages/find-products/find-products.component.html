@@ -3,13 +3,14 @@
     <ng-container *ngrxLet="findAllProductsStatus$ as findAllProductsStatus">
       <div class="md:shadow-border mx-auto rounded overflow-hidden">
         <div class="p-0 md:p-8">
-          <h2 class="mb-8 text-center text-4xl font-medium uppercase">Tìm sản phẩm</h2>
+          <h2 class="mb-8 text-center text-4xl font-medium uppercase">Danh sách sản phẩm</h2>
           <form [formGroup]="findProductsForm" (ngSubmit)="onFindProductsSubmit()" formAutofocus>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <mat-form-field appearance="outline" class="w-full col-span-1 sm:col-span-2">
                 <mat-label>Từ khóa</mat-label>
                 <input type="text" formControlName="search" matInput
                   [disabledControl]="findAllProductsStatus === StoreStatus.LOADING">
+                <mat-icon matSuffix>search</mat-icon>
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Danh mục</mat-label>

@@ -8,8 +8,10 @@ import { Product } from 'src/app/core/models';
 })
 export class ProductListComponent implements OnInit {
 
-  @Input() loading!: boolean;
-  @Input() productList!: Product[];
+  @Input() loading: boolean = false;
+  @Input() productList: Product[] = [];
+  @Input() minimal: boolean = false;
+  @Input() transparent: boolean = false;
 
   constructor() { }
 

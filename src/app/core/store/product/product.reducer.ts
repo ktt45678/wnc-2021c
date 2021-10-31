@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 
 import { StoreStatus } from '../../enums/store-status.enum';
 import { Product, Paginated } from '../../models';
-import { createProduct, createProductFailure, createProductSuccess, destroyProducts, findAllProducts, findAllProductsFailure, findAllProductsSuccess, findOneProduct, findOneProductFailure, findOneProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess } from './product.actions';
+import { createProduct, createProductFailure, createProductSuccess, destroyProducts, findAllProducts, findAllProductsFailure, findAllProductsSuccess, findOneProduct, findOneProductFailure, findOneProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess, findRelatedProducts, findRelatedProductsFailure, findRelatedProductsSuccess } from './product.actions';
 
 export interface ProductState {
   findAllProductsStatus: StoreStatus;
@@ -13,11 +13,13 @@ export interface ProductState {
   findTopEndProductsStatus: StoreStatus;
   findTopBidProductsStatus: StoreStatus;
   findTopPriceProductsStatus: StoreStatus;
+  findRelatedProductsStatus: StoreStatus;
   product: Product | null;
   productList: Paginated<Product>;
   topEndProducts: Product[];
   topBidProducts: Product[];
   topPriceProducts: Product[];
+  relatedProducts: Product[];
 }
 
 export const initialState: ProductState = {
@@ -29,11 +31,13 @@ export const initialState: ProductState = {
   findTopEndProductsStatus: StoreStatus.INIT,
   findTopBidProductsStatus: StoreStatus.INIT,
   findTopPriceProductsStatus: StoreStatus.INIT,
+  findRelatedProductsStatus: StoreStatus.INIT,
   product: null,
   productList: new Paginated<Product>(),
   topEndProducts: [],
   topBidProducts: [],
-  topPriceProducts: []
+  topPriceProducts: [],
+  relatedProducts: []
 }
 
 export const productReducer = createReducer(
@@ -81,9 +85,8 @@ export const productReducer = createReducer(
     ...state,
     updateProductStatus: StoreStatus.LOADING
   })),
-  on(updateProductSuccess, (state, action) => ({
+  on(updateProductSuccess, (state) => ({
     ...state,
-    product: action.payload,
     updateProductStatus: StoreStatus.SUCCESS
   })),
   on(updateProductFailure, (state) => ({
@@ -143,5 +146,18 @@ export const productReducer = createReducer(
   on(findTopPriceProductsFailure, (state) => ({
     ...state,
     findTopPriceProductsStatus: StoreStatus.FAILURE
+  })),
+  on(findRelatedProducts, (state) => ({
+    ...state,
+    findRelatedProductsStatus: StoreStatus.LOADING
+  })),
+  on(findRelatedProductsSuccess, (state, action) => ({
+    ...state,
+    relatedProducts: action.payload,
+    findRelatedProductsStatus: StoreStatus.SUCCESS
+  })),
+  on(findRelatedProductsFailure, (state) => ({
+    ...state,
+    findRelatedProductsStatus: StoreStatus.FAILURE
   }))
 );

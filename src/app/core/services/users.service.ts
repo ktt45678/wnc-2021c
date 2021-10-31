@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Paginated, User } from '../models';
@@ -26,5 +26,9 @@ export class UsersService {
 
   update(id: number, fullName?: string, email?: string, birthdate?: Date, address?: string, currentPassword?: string, password?: string, role?: string, canSellUntil?: Date) {
     return this.http.patch<User>(`users/${id}`, { fullName, email, birthdate, address, currentPassword, password, role, canSellUntil });
+  }
+
+  findCurrent() {
+    return this.http.get<User>('users/0');
   }
 }

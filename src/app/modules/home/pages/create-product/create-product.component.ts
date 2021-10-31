@@ -32,7 +32,7 @@ export class CreateProductComponent implements OnInit {
       category: new FormControl(null, [Validators.required]),
       startingPrice: new FormControl(null, [Validators.required, Validators.min(1_000), Validators.max(100_000_000_000)]),
       priceStep: new FormControl(null, [Validators.required, Validators.min(1_000), Validators.max(100_000_000_000)]),
-      buyPrice: new FormControl(null, [Validators.required, Validators.min(1_000), Validators.max(100_000_000_000)]),
+      buyPrice: new FormControl(null, [Validators.min(1_000), Validators.max(100_000_000_000)]),
       autoRenew: new FormControl(false, [Validators.required]),
       expiry: new FormControl('', [Validators.required]),
       imageInput: new FormControl('', [Validators.required]),
@@ -44,8 +44,13 @@ export class CreateProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.createProductStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      if (status === StoreStatus.SUCCESS)
+      if (status === StoreStatus.SUCCESS) {
         this.createProductForm.reset();
+        this.createProductForm.patchValue({
+          autoRenew: false,
+          images: []
+        });
+      }
     });
   }
 
@@ -72,7 +77,7 @@ export class CreateProductComponent implements OnInit {
           this.snackBar.open('Hình ảnh không được hỗ trợ', 'Đóng', { duration: 10000 });
           return;
         }
-        if (this.createProductForm.value.images.length >= 30) {
+        if (Array.isArray(this.createProductForm.value.images) && this.createProductForm.value.images.length >= 30) {
           this.snackBar.open('Đã vượt quá số lượng ảnh cho phép', 'Đóng', { duration: 10000 });
           return;
         }

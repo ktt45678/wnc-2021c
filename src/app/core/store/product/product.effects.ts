@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { findAllProducts, findAllProductsSuccess, findAllProductsFailure, findOneProduct, findOneProductFailure, findOneProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, createProduct, createProductFailure, createProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess } from '.';
+import { findAllProducts, findAllProductsSuccess, findAllProductsFailure, findOneProduct, findOneProductFailure, findOneProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, createProduct, createProductFailure, createProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess, findRelatedProductsSuccess, findRelatedProductsFailure, findRelatedProducts } from '.';
 import { ProductsService } from '../../services/products.service';
 
 @Injectable()
@@ -109,6 +109,18 @@ export class ProductEffects {
         this.productsService.findAll(1, 5, undefined, 'desc(displayPrice)', undefined, false).pipe(
           map(data => findTopPriceProductsSuccess({ payload: data.results })),
           catchError(() => of(findTopPriceProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findRelatedProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findRelatedProducts),
+      switchMap(action =>
+        this.productsService.findAll(1, 5, undefined, 'asc(_id)', action.category, false, undefined, undefined, action.except).pipe(
+          map(data => findRelatedProductsSuccess({ payload: data.results })),
+          catchError(() => of(findRelatedProductsFailure()))
         )
       )
     )

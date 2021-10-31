@@ -26,7 +26,7 @@ export class ProductsService {
     return this.http.post<Product>('products', formData);
   }
 
-  findAll(page?: number, limit?: number, search?: string, sort?: string, category?: number, ended?: boolean, seller?: number, winner?: number) {
+  findAll(page?: number, limit?: number, search?: string, sort?: string, category?: number, ended?: boolean, seller?: number, winner?: number, except?: number) {
     const params: any = {};
     page != null && (params.page = page);
     limit != null && (params.limit = limit);
@@ -36,6 +36,7 @@ export class ProductsService {
     ended != null && (params.ended = ended);
     seller != null && (params.seller = seller);
     winner != null && (params.winner = winner);
+    except != null && (params.except = except);
     return this.http.get<Paginated<Product>>('products', { params });
   }
 
@@ -49,5 +50,25 @@ export class ProductsService {
 
   remove(id: number) {
     return this.http.delete(`products/${id}`);
+  }
+
+  createBid(id: number, price: number) {
+    return this.http.post(`products/${id}/bid`, { price });
+  }
+
+  bidHint(id: number) {
+    return this.http.get(`products/${id}/bid`);
+  }
+
+  requestBid(id: number) {
+    return this.http.post(`products/${id}/request-bid`, {});
+  }
+
+  approveBid(id: number, user: number, accept: boolean) {
+    return this.http.post(`products/${id}/approve-bid`, { user, accept });
+  }
+
+  denyBid(id: number, user: number) {
+    return this.http.post(`products/${id}/deny-bid`, { user });
   }
 }

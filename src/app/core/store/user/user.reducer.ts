@@ -2,12 +2,14 @@ import { createReducer, on } from '@ngrx/store';
 
 import { StoreStatus } from '../../enums/store-status.enum';
 import { User, Paginated } from '../../models';
-import { destroyUsers, findAllUsers, findAllUsersFailure, findAllUsersSuccess, findOneUser, findOneUserFailure, findOneUserSuccess, updateUser, updateUserFailure, updateUserSuccess } from '.';
+import { destroyUsers, findAllUsers, findAllUsersFailure, findAllUsersSuccess, findCurrentUser, findCurrentUserFailure, findCurrentUserSuccess, findOneUser, findOneUserFailure, findOneUserSuccess, updateUser, updateUserFailure, updateUserSuccess } from '.';
 
 export interface UserState {
   findAllUsersStatus: StoreStatus;
   findOneUserStatus: StoreStatus;
   updateUserStatus: StoreStatus;
+  findCurrentUserStatus: StoreStatus;
+  currentUser: User | null;
   selectedUser: User | null;
   userList: Paginated<User>
 }
@@ -16,6 +18,8 @@ export const initialState: UserState = {
   findAllUsersStatus: StoreStatus.INIT,
   findOneUserStatus: StoreStatus.INIT,
   updateUserStatus: StoreStatus.INIT,
+  findCurrentUserStatus: StoreStatus.INIT,
+  currentUser: null,
   selectedUser: null,
   userList: new Paginated<User>()
 }
@@ -60,6 +64,19 @@ export const userReducer = createReducer(
   on(updateUserFailure, (state) => ({
     ...state,
     updateUserStatus: StoreStatus.FAILURE
+  })),
+  on(findCurrentUser, (state) => ({
+    ...state,
+    findCurrentUserStatus: StoreStatus.LOADING
+  })),
+  on(findCurrentUserSuccess, (state, action) => ({
+    ...state,
+    currentUser: action.payload,
+    findCurrentUserStatus: StoreStatus.SUCCESS
+  })),
+  on(findCurrentUserFailure, (state) => ({
+    ...state,
+    findCurrentUserStatus: StoreStatus.FAILURE
   })),
   on(destroyUsers, () => ({
     ...initialState

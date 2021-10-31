@@ -114,3 +114,17 @@ export const findTopPriceProductsSuccess = createAction(
 export const findTopPriceProductsFailure = createAction(
   '[Products] Find Top Price Products Failure'
 );
+
+export const findRelatedProducts = createAction(
+  '[Products] Find Related Products',
+  props<{ category: number, except?: number }>()
+);
+
+export const findRelatedProductsSuccess = createAction(
+  '[Products] Find Related Products Success',
+  props<{ payload: Product[] }>()
+);
+
+export const findRelatedProductsFailure = createAction(
+  '[Products] Find Related Products Failure'
+);

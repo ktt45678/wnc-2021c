@@ -7,7 +7,7 @@
         </div>
         <div class="p-0 md:p-8">
           <h2 class="mb-8 text-center text-4xl font-medium uppercase">Bán sản phẩm mới</h2>
-          <form [formGroup]="createProductForm" (ngSubmit)="onCreateProductSubmit()" formAutofocus>
+          <form [formGroup]="createProductForm" (ngSubmit)="onCreateProductSubmit()">
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Tên sản phẩm</mat-label>
               <input type="text" formControlName="name" matInput
@@ -106,7 +106,7 @@
                 </mat-error>
               </mat-form-field>
               <div>
-                <label for="image-input">Hình ảnh (Đã chọn {{ createProductForm.value.images.length || 0 }})</label>
+                <label for="image-input">Hình ảnh (Đã chọn {{ createProductForm.value.images?.length || 0 }})</label>
                 <input id="image-input" type="file" formControlName="imageInput" (change)="onFileChange($event)"
                   accept=".png,.jpg,.gif" [disabledControl]="createProductStatus === StoreStatus.LOADING">
               </div>

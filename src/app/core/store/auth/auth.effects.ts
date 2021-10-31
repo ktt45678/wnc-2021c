@@ -127,7 +127,7 @@ export class AuthEffects {
       switchMap(action =>
         this.authService.signOut(action.token).pipe(
           map(() => {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/auth/sign-in']);
             return signOutSuccess();
           }),
           catchError(() => of(signOutFailure))

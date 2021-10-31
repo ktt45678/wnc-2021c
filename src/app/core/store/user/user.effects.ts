@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { findAllUsers, findAllUsersSuccess, findAllUsersFailure, findOneUser, findOneUserSuccess, findOneUserFailure, updateUser, updateUserSuccess, updateUserFailure } from '.';
+import { findAllUsers, findAllUsersSuccess, findAllUsersFailure, findOneUser, findOneUserSuccess, findOneUserFailure, updateUser, updateUserSuccess, updateUserFailure, findCurrentUser, findCurrentUserSuccess, findCurrentUserFailure } from '.';
 import { UsersService } from '../../services/users.service';
 
 @Injectable()
@@ -43,6 +43,18 @@ export class UserEffects {
             return updateUserSuccess({ payload: data });
           }),
           catchError(() => of(updateUserFailure()))
+        )
+      )
+    )
+  );
+
+  findCurrentUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findCurrentUser),
+      switchMap(() =>
+        this.usersService.findCurrent().pipe(
+          map(data => findCurrentUserSuccess({ payload: data })),
+          catchError(() => of(findCurrentUserFailure()))
         )
       )
     )

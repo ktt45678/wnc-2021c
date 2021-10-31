@@ -8,6 +8,7 @@ export class User {
   role!: string;
   activated?: boolean;
   point?: number;
+  ratings!: any[];
   requestUpgrade?: boolean;
   createdAt!: Date;
   updatedAt!: Date;
