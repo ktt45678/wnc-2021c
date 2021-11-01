@@ -46,6 +46,8 @@ export class CreateProductComponent implements OnInit {
     this.createProductStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
       if (status === StoreStatus.SUCCESS) {
         this.createProductForm.reset();
+        this.createProductForm.markAsPristine();
+        this.createProductForm.markAsUntouched();
         this.createProductForm.patchValue({
           autoRenew: false,
           images: []

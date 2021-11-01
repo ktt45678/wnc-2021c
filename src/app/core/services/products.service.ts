@@ -71,4 +71,8 @@ export class ProductsService {
   denyBid(id: number, user: number) {
     return this.http.post(`products/${id}/deny-bid`, { user });
   }
+
+  createProductRating(id: number, ratingType: number, comment: string) {
+    return this.http.post(`products/${id}/rating`, { ratingType, comment });
+  }
 }

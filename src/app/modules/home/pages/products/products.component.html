@@ -5,12 +5,12 @@
         <div class="md:col-span-3">
           <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
             <mat-tab label="Thông tin">
-              <div class="m-4 p-4 rounded shadow-sm bg-gray-200">
+              <div class="m-4 p-4 shadow-sm bg-white rounded">
                 <quill-view-html [content]="product.description"></quill-view-html>
               </div>
             </mat-tab>
             <mat-tab label="Hình ảnh">
-              <div class="m-4 p-4 rounded shadow-sm bg-gray-200">
+              <div class="m-4 p-4 shadow-sm bg-white rounded">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div class="my-2 aspect-w-1 aspect-h-1"
                     *ngFor="let image of product.images; index as i; trackBy: trackProduct">
@@ -20,7 +20,7 @@
               </div>
             </mat-tab>
             <mat-tab label="Đấu giá">
-              <div class="m-4 p-4 rounded shadow-sm bg-gray-200">
+              <div class="m-4 p-4 shadow-sm bg-white rounded">
                 <ng-container *ngIf="currentUser; else guestUser">
                   <div *ngIf="product.ended; else isAuthor">
                     <div class="my-4">
@@ -175,16 +175,15 @@
                     </div>
                   </ng-template>
                   <ng-template #blacklisted>
-                    <div *ngIf="product.blacklist | userInArray:currentUser; else noRating">
+                    <div *ngIf="product.blacklisted; else noRating">
                       <p>Bạn đã bị người bán từ chối ra giá và không thể tham gia đấu giá nữa</p>
                     </div>
                   </ng-template>
                   <ng-template #noRating>
-                    <div
-                      *ngIf="!currentUser.ratings?.length && !(product.whitelist | userInArray:currentUser); else canBid">
+                    <div *ngIf="!currentUser.ratings?.length && !product.whitelisted; else canBid">
                       <p>Bạn có thể tham gia đấu giá sau khi được người bán cho phép</p>
                       <button class="!mt-2" mat-flat-button color="primary" (click)="onRequestBid()"
-                        *ngIf="!(product.requestedUsers | userInArray:currentUser); else pendingRequest"
+                        *ngIf="!product.requestedUser; else pendingRequest"
                         [disabled]="(requestBidStatus$ | async) === StoreStatus.LOADING">Yêu cầu đấu
                         giá</button>
                       <ng-template #pendingRequest>
@@ -215,7 +214,7 @@
                         *ngrxLet="createBidStatus$ as createBidStatus">
                         <mat-form-field appearance="outline" class="w-full">
                           <mat-label>Mức giá tối đa bạn có thể trả</mat-label>
-                          <input type="text" formControlName="price" matInput
+                          <input type="number" formControlName="price" matInput
                             [disabledControl]="createBidStatus === StoreStatus.LOADING">
                           <mat-error *ngIf="createBidForm.controls.price.errors?.required; else bidPriceMin">
                             Mức giá là <strong>bắt buộc</strong>
@@ -248,7 +247,7 @@
               </div>
             </mat-tab>
             <mat-tab label="Cập nhật" *ngIf="currentUser?._id === product.seller._id">
-              <div class="m-4 p-4 shadow-sm">
+              <div class="m-4 p-4 shadow-sm bg-white rounded">
                 <form [formGroup]="updateProductForm" (ngSubmit)="onUpdateProductSubmit()"
                   *ngrxLet="updateProductStatus$ as updateProductStatus">
                   <quill-editor formControlName="description"
@@ -262,6 +261,92 @@
                     </div>
                   </div>
                 </form>
+              </div>
+            </mat-tab>
+            <mat-tab label="Đánh giá" *ngIf="product.ended">
+              <div class="m-4 p-4 shadow-sm bg-white rounded space-y-2">
+                <ng-container *ngIf="product.winner; else cannotCreateRating">
+                  <div *ngrxLet="createRatingStatus$ as createRatingStatus">
+                    <form [formGroup]="createRatingForm" (ngSubmit)="onCreateRatingSubmit()"
+                      *ngIf="(currentUser?._id === product.seller._id && !product.winnerRating) || (currentUser?._id === product.winner._id && !product.sellerRating)">
+                      <div class="my-2">
+                        <mat-radio-group class="space-x-5" formControlName="ratingType" aria-label="Select rating type">
+                          <mat-radio-button value="1">
+                            <mat-icon>thumb_up</mat-icon>
+                          </mat-radio-button>
+                          <mat-radio-button value="-1">
+                            <mat-icon>thumb_down</mat-icon>
+                          </mat-radio-button>
+                        </mat-radio-group>
+                        <mat-label class="ml-4" *ngIf="createRatingForm.controls.ratingType.errors?.required">
+                          Đưa ra đánh giá của bạn
+                        </mat-label>
+                      </div>
+                      <mat-form-field appearance="outline" class="w-full">
+                        <mat-label>Bình luận của bạn (không bắt buộc)</mat-label>
+                        <textarea formControlName="comment" matInput cdkTextareaAutosize cdkAutosizeMinRows="8"
+                          [disabledControl]="createRatingStatus === StoreStatus.LOADING"></textarea>
+                        <mat-error *ngIf="createRatingForm.controls.comment.errors?.maxlength">
+                          Bình luận không được <strong>vượt quá 2000 kí tự</strong>
+                        </mat-error>
+                      </mat-form-field>
+                      <div class="flex my-2">
+                        <div class="ml-auto">
+                          <button type="submit" mat-flat-button color="primary"
+                            [disabled]="createRatingStatus === StoreStatus.LOADING">Gửi</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div>
+                    <ng-container *ngIf="!product.sellerRating && !product.winnerRating; else hasRating">
+                      <p class="text-center text-gray-600">Chưa có đánh giá được gửi</p>
+                    </ng-container>
+                    <ng-template #hasRating>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <ng-container *ngIf="product.winnerRating">
+                          <mat-card class="mat-elevation-z4">
+                            <mat-card-header>
+                              <mat-card-title>{{ product.seller.fullName }}</mat-card-title>
+                              <mat-card-subtitle>{{ product.winnerRating.createdAt | date:'dd/MM/yyyy hh:mm:ss' }}
+                              </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                              <mat-icon *ngIf="product.winnerRating.type === 1; else ratingThumbdown">thumb_up
+                              </mat-icon>
+                              <ng-template #ratingThumbdown>
+                                <mat-icon>thumb_down</mat-icon>
+                              </ng-template>
+                              <p>{{ product.winnerRating.comment }}</p>
+                              <p class="text-sm text-gray-500 text-right mt-4">Đánh giá của người bán</p>
+                            </mat-card-content>
+                          </mat-card>
+                        </ng-container>
+                        <ng-container *ngIf="product.sellerRating">
+                          <mat-card class="mat-elevation-z4">
+                            <mat-card-header>
+                              <mat-card-title>{{ product.winner.fullName }}</mat-card-title>
+                              <mat-card-subtitle>{{ product.sellerRating.createdAt | date:'dd/MM/yyyy hh:mm:ss' }}
+                              </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                              <mat-icon *ngIf="product.sellerRating.type === 1; else ratingThumbdown">thumb_up
+                              </mat-icon>
+                              <ng-template #ratingThumbdown>
+                                <mat-icon>thumb_down</mat-icon>
+                              </ng-template>
+                              <p>{{ product.sellerRating.comment }}</p>
+                              <p class="text-sm text-gray-500 text-right mt-4">Đánh giá của người mua</p>
+                            </mat-card-content>
+                          </mat-card>
+                        </ng-container>
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-container>
+                <ng-template #cannotCreateRating>
+                  <p>Không có người dùng nào đã mua được sản phẩm này</p>
+                </ng-template>
               </div>
             </mat-tab>
           </mat-tab-group>

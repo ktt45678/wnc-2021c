@@ -48,10 +48,17 @@
                     <p class="text-center">Không có thông báo mới</p>
                   </div>
                   <ng-template #hasNotifications>
-                    <a class="space-y-2" mat-menu-item *ngFor="let noti of notifications"
-                      [routerLink]="['/home', 'products', noti.product]">
-                      <span>{{ noti.content }}</span>
-                    </a>
+                    <ng-container *ngFor="let noti of notifications; index as i; trackBy:trackDate">
+                      <a *ngIf="noti.product; else noLink" class="space-y-2" mat-menu-item
+                        [routerLink]="['/home', 'products', noti.product]">
+                        <span>{{ noti.content }}</span>
+                      </a>
+                      <ng-template #noLink>
+                        <button class="space-y-2" mat-menu-item>
+                          <span>{{ noti.content }}</span>
+                        </button>
+                      </ng-template>
+                    </ng-container>
                   </ng-template>
                 </mat-menu>
               </ng-container>

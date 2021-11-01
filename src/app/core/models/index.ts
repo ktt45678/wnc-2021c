@@ -6,3 +6,4 @@ export * from './product.model';
 export * from './bid.model';
 export * from './category-group.model';
 export * from './notification.model';
+export * from './rating.model';

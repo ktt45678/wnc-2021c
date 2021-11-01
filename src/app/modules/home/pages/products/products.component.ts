@@ -12,10 +12,11 @@ import { Role } from '../../../../core/enums/role.enum';
 import { IoEvent } from '../../../../core/enums/io-event.enum';
 import { AppState } from '../../../../core/store';
 import { Bid, Product, User } from '../../../../core/models';
-import { destroyProducts, findOneProduct, findOneProductSuccess, findRelatedProducts, updateProduct } from '../../../../core/store/product';
+import { destroyProducts, findOneProduct, findRelatedProducts, updateProduct } from '../../../../core/store/product';
 import { findCurrentUser } from '../../../../core/store/user';
+import { approveBid, createBid, denyBid, requestBid } from '../../../../core/store/bid';
+import { createRating } from '../../../../core/store/rating';
 import { DestroyService } from '../../../../core/services/destroy.service';
-import { approveBid, createBid, denyBid, requestBid } from 'src/app/core/store/bid';
 
 @Component({
   selector: 'app-products',
@@ -28,6 +29,7 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
   Role = Role;
   updateProductForm: FormGroup;
   createBidForm: FormGroup;
+  createRatingForm: FormGroup;
   productId?: number;
   minBidPrice: number = 1000;
   bidDataSource?: MatTableDataSource<Bid>;
@@ -46,6 +48,7 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
   requestBidStatus$: Observable<StoreStatus>;
   approveBidStatus$: Observable<StoreStatus>;
   denyBidStatus$: Observable<StoreStatus>;
+  createRatingStatus$: Observable<StoreStatus>;
   product$: Observable<Product | null>;
   relatedProduct$: Observable<Product[]>;
   accessToken$: Observable<string | null>;
@@ -59,6 +62,10 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
     this.createBidForm = new FormGroup({
       price: new FormControl('')
     });
+    this.createRatingForm = new FormGroup({
+      ratingType: new FormControl(null, [Validators.required]),
+      comment: new FormControl('', [Validators.maxLength(2000)])
+    });
     this.findOneProductStatus$ = store.select(state => state.product.findOneProductStatus);
     this.findRelatedProductsStatus$ = store.select(state => state.product.findRelatedProductsStatus);
     this.updateProductStatus$ = store.select(state => state.product.updateProductStatus);
@@ -67,6 +74,7 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
     this.requestBidStatus$ = store.select(state => state.bid.requestBidStatus);
     this.approveBidStatus$ = store.select(state => state.bid.approveBidStatus);
     this.denyBidStatus$ = store.select(state => state.bid.denyBidStatus);
+    this.createRatingStatus$ = store.select(state => state.rating.createRatingStatus);
     this.product$ = store.select(state => state.product.product);
     this.relatedProduct$ = store.select(state => state.product.relatedProducts);
     this.accessToken$ = store.select(state => state.auth.accessToken);
@@ -101,8 +109,9 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
       if (token)
         this.store.dispatch(findCurrentUser());
     })).subscribe();
-    this.socket.fromEvent<Product>(IoEvent.PRODUCT_VIEW_REFRESH).pipe(tap(product => {
-      this.loadProductFromSocket(product);
+    this.socket.fromEvent(IoEvent.PRODUCT_VIEW_REFRESH).pipe(tap(() => {
+      if (this.productId)
+        this.store.dispatch(findOneProduct({ id: this.productId }));
     }), takeUntil(this.destroyService)).subscribe();
     this.socket.fromEvent(IoEvent.PRODUCT_VIEW_REMOVE).pipe(tap(() => {
       this.router.navigate(['/home']);
@@ -113,11 +122,6 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
     if (this.productId)
       this.socket.emit(IoEvent.PRODUCTS_VIEW_LEAVE, { id: this.productId });
     this.store.dispatch(destroyProducts());
-  }
-
-  loadProductFromSocket(product: Product): void {
-    if (this.productId)
-      this.store.dispatch(findOneProductSuccess({ payload: product }));
   }
 
   onUpdateProductSubmit(): void {
@@ -132,6 +136,14 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
       return;
     if (this.productId)
       this.store.dispatch(createBid({ id: this.productId, ...this.createBidForm.value }));
+  }
+
+  onCreateRatingSubmit(): void {
+    if (this.createRatingForm.invalid)
+      return;
+    console.log(this.createRatingForm.value);
+    if (this.productId)
+      this.store.dispatch(createRating({ id: this.productId, ...this.createRatingForm.value }));
   }
 
   onRequestBid(): void {

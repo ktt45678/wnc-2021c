@@ -63,6 +63,10 @@ export class HomeLayoutComponent implements OnInit, AfterContentInit, OnDestroy 
     return item?._id || null;
   }
 
+  trackDate(index: number, item: any) {
+    return item?.createdAt || null;
+  }
+
   playNotificationAudio(): void {
     const audio = new Audio();
     audio.src = '../../../../assets/audio/notification.mp3';

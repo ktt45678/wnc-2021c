@@ -1,4 +1,4 @@
-import { Bid, Category, User } from '.';
+import { Bid, Category, Rating, User } from '.';
 
 export class Product {
   _id?: number;
@@ -20,7 +20,12 @@ export class Product {
   whitelist!: User[];
   requestedUsers!: User[];
   ended!: boolean;
+  sellerRating?: Rating
+  winnerRating?: Rating
   expiry!: string;
   createdAt!: string;
   updatedAt!: string;
+  blacklisted?: boolean;
+  whitelisted?: boolean;
+  requestedUser?: boolean;
 }
