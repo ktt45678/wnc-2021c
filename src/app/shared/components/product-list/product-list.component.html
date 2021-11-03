@@ -3,31 +3,49 @@
     <mat-spinner class="block mx-auto"></mat-spinner>
   </ng-container>
   <ng-template #loadedProductList>
-    <ng-container *ngIf="!productList.length; else hasProducts">
+    <ng-container *ngIf="!_productList.length; else hasProducts">
       <p class="text-center">Không có sản phẩm</p>
     </ng-container>
   </ng-template>
   <ng-template #hasProducts>
-    <div class="grid grid-cols-1 gap-4" [class]="minimal ? 'md:grid-cols-1' : 'md:grid-cols-5'">
-      <ng-container *ngFor="let product of productList; index as i; trackBy: trackProduct">
+    <div class="grid grid-cols-1 gap-4"
+      [class]="rowSize === 1 ? 'md:grid-cols-1' : rowSize === 4 ? 'md:grid-cols-4' : 'md:grid-cols-5'">
+      <ng-container *ngFor="let product of _productList; index as i; trackBy: trackProduct">
         <mat-card>
           <a [routerLink]="['/home', 'products', product._id]">
             <mat-card-header class="overflow-hidden">
-              <mat-card-title class="leading-7 h-14 overflow-hidden">{{ product.name }}</mat-card-title>
-              <mat-card-subtitle>{{ product.category.name }} - {{ product.category.subName }}</mat-card-subtitle>
+              <mat-card-title class="leading-7 h-14 overflow-hidden">{{ product.name }}
+              </mat-card-title>
+              <mat-card-subtitle class="leading-4 h-8 overflow-hidden">{{ product.category.name }} - {{
+                product.category.subName }}</mat-card-subtitle>
             </mat-card-header>
             <div class="my-2 aspect-w-1 aspect-h-1">
               <img class="object-cover block !mx-auto" mat-card-image [src]="product.images[0]" [alt]="product.name"
                 loading="lazy">
             </div>
             <mat-card-content>
-              <p>Giá hiện tại: <strong>{{ product.displayPrice| currency:'VND' }}</strong></p>
-              <p>Người thắng: <strong>{{ product.winner ? product.winner.fullName : 'Không có' }}</strong></p>
-              <p>Mua ngay: <strong>{{ product.buyPrice ? (product.buyPrice | currency:'VND') : 'Không có' }}</strong>
+              <div class="mb-4">
+                <p class="text-2xl">
+                  <strong>{{ product.displayPrice | currency:'VND' }}</strong>
+                </p>
+                <ng-container *ngIf="product.winner">
+                  <p class="text-base">
+                    Bởi: <strong>{{ product.winner.fullName }} ({{ product.winner.point }} điểm)</strong>
+                  </p>
+                </ng-container>
+                <p class="text-base" *ngIf="product.buyPrice">
+                  Mua ngay với: <strong>{{ product.buyPrice | currency:'VND' }}</strong>
+                </p>
+                <p class="text-base">
+                  Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong>
+                </p>
+              </div>
+              <p class="leading-5">
+                Tổng Lượt ra giá: <strong>{{ product.bidCount }}</strong>
               </p>
-              <p>Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong></p>
-              <p>Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong></p>
-              <p>Lượt ra giá: <strong>{{ product.bidCount }}</strong></p>
+              <p class="leading-5">
+                Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong>
+              </p>
             </mat-card-content>
           </a>
           <mat-card-actions align="end" class="z-10">
@@ -39,9 +57,14 @@
                 <mat-chip>Mới</mat-chip>
               </mat-chip-list>
             </div>
-            <button mat-icon-button>
-              <mat-icon>favorite_border</mat-icon>
-            </button>
+            <ng-container *ngrxLet="user$ as user">
+              <button mat-icon-button [disabled]="user?.role === Role.ADMIN" (click)="onFavorite(product)">
+                <mat-icon *ngIf="!product.favorited; else addedToFavorite">favorite_border</mat-icon>
+                <ng-template #addedToFavorite>
+                  <mat-icon>favorite</mat-icon>
+                </ng-template>
+              </button>
+            </ng-container>
           </mat-card-actions>
         </mat-card>
       </ng-container>

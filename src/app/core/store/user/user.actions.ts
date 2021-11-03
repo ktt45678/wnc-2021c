@@ -61,3 +61,7 @@ export const findCurrentUserSuccess = createAction(
 export const findCurrentUserFailure = createAction(
   '[Users] Find Current User Failure'
 );
+
+export const resetUpdateUser = createAction(
+  '[Users] Reset Update User'
+);

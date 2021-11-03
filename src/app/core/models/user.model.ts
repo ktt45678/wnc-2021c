@@ -1,3 +1,5 @@
+import { Rating } from '.';
+
 export class User {
   _id!: number;
   email!: string;
@@ -7,8 +9,8 @@ export class User {
   password?: string;
   role!: string;
   activated?: boolean;
-  point?: number;
-  ratings!: any[];
+  point!: number;
+  ratingCount!: number;
   requestUpgrade?: boolean;
   createdAt!: Date;
   updatedAt!: Date;

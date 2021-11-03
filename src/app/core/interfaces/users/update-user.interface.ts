@@ -5,6 +5,8 @@ export interface IUpdateUser {
   address?: string;
   currentPassword?: string;
   password?: string;
-  role?: string;
-  canSellUntil?: Date;
+  requestUpgrade?: boolean;
+  upgrade?: boolean;
+  downgrade?: boolean;
+  banned?: boolean;
 }

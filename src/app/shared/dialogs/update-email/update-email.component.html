@@ -1,0 +1,30 @@
+<h1 mat-dialog-title class="uppercase font-semibold" align="center">Cập nhật email</h1>
+<div mat-dialog-content>
+  <div [formGroup]="updateEmailForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Địa chỉ email mới</mat-label>
+      <input type="text" matInput formControlName="email" [disabledControl]="updateUserStatus === StoreStatus.LOADING">
+      <mat-error *ngIf="updateEmailForm.controls.email.errors?.required; else isEmail">
+        Địa chỉ email là <strong>bắt buộc</strong>
+      </mat-error>
+      <ng-template #isEmail>
+        <mat-error *ngIf="updateEmailForm.controls.name.errors?.email">
+          Địa chỉ email <strong>phải hợp lệ</strong>
+        </mat-error>
+      </ng-template>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Mật khẩu hiện tại</mat-label>
+      <input type="password" matInput formControlName="currentPassword"
+        [disabledControl]="updateUserStatus === StoreStatus.LOADING">
+      <mat-error *ngIf="updateEmailForm.controls.currentPassword.errors?.required">
+        Mật khẩu hiện tại là <strong>bắt buộc</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()" [disabled]="updateUserStatus === StoreStatus.LOADING">Hủy</button>
+  <button mat-button (click)="onUpdateEmailSubmit()" [disabled]="updateUserStatus === StoreStatus.LOADING">Xác
+    nhận</button>
+</div>

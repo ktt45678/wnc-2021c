@@ -12,6 +12,7 @@ import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { AppState } from '../../../../core/store';
 import { Product, Paginated } from '../../../../core/models';
 import { destroyProducts, findAllProducts } from '../../../../core/store/product';
+import { RemoveProductComponent } from '../../dialogs/remove-product/remove-product.component';
 
 @Component({
   selector: 'app-products',
@@ -73,5 +74,12 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private initializeData(products: Product[]): void {
     this.productDataSource = new MatTableDataSource(products);
+  }
+
+  removeProductDialog(product: Product) {
+    this.dialog.open(RemoveProductComponent, {
+      width: '350px',
+      data: product
+    });
   }
 }

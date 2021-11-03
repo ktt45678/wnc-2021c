@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, OnDestroy } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,17 +6,20 @@ import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
 import { first, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Socket } from 'ngx-socket-io';
+import { cloneDeep } from 'lodash';
 
 import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { Role } from '../../../../core/enums/role.enum';
 import { IoEvent } from '../../../../core/enums/io-event.enum';
+import { RatingType } from '../../../../core/enums/rating-type.enum';
 import { AppState } from '../../../../core/store';
 import { Bid, Product, User } from '../../../../core/models';
 import { destroyProducts, findOneProduct, findRelatedProducts, updateProduct } from '../../../../core/store/product';
-import { findCurrentUser } from '../../../../core/store/user';
+import { destroyUsers, findCurrentUser } from '../../../../core/store/user';
 import { approveBid, createBid, denyBid, requestBid } from '../../../../core/store/bid';
 import { createRating } from '../../../../core/store/rating';
 import { DestroyService } from '../../../../core/services/destroy.service';
+import { addToFavorite, removeFromFavorite } from 'src/app/core/store/favorite';
 
 @Component({
   selector: 'app-products',
@@ -24,9 +27,12 @@ import { DestroyService } from '../../../../core/services/destroy.service';
   styleUrls: ['./products.component.scss'],
   providers: [DestroyService]
 })
-export class ProductsComponent implements AfterContentInit, OnDestroy {
+export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
   StoreStatus = StoreStatus;
   Role = Role;
+  RatingType = RatingType;
+  product?: Product | null;
+  currentUser?: User | null;
   updateProductForm: FormGroup;
   createBidForm: FormGroup;
   createRatingForm: FormGroup;
@@ -81,6 +87,15 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
     this.currentUser$ = store.select(state => state.user.currentUser);
   }
 
+  ngOnInit(): void {
+    this.product$.pipe(takeUntil(this.destroyService)).subscribe(product => {
+      this.product = cloneDeep(product);
+    });
+    this.currentUser$.pipe(takeUntil(this.destroyService)).subscribe(currentUser => {
+      this.currentUser = currentUser;
+    });
+  }
+
   ngAfterContentInit(): void {
     this.route.params.pipe(takeUntil(this.destroyService)).subscribe(params => {
       this.productId = +params.id;
@@ -122,6 +137,7 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
     if (this.productId)
       this.socket.emit(IoEvent.PRODUCTS_VIEW_LEAVE, { id: this.productId });
     this.store.dispatch(destroyProducts());
+    this.store.dispatch(destroyUsers());
   }
 
   onUpdateProductSubmit(): void {
@@ -159,6 +175,22 @@ export class ProductsComponent implements AfterContentInit, OnDestroy {
   onDenyBid(user: number): void {
     if (this.productId)
       this.store.dispatch(denyBid({ id: this.productId, user: user }));
+  }
+
+  onFavorite() {
+    if (!this.currentUser) {
+      this.router.navigate(['/auth', 'sign-in']);
+      return;
+    }
+    if (this.product) {
+      if (!this.product.favorited) {
+        this.product.favorited = true;
+        this.store.dispatch(addToFavorite({ id: this.product._id }));
+      } else {
+        this.product.favorited = false;
+        this.store.dispatch(removeFromFavorite({ id: this.product._id }));
+      }
+    }
   }
 
   trackProduct(index: number, item: any) {

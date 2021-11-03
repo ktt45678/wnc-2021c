@@ -1,0 +1,16 @@
+<h1 mat-dialog-title class="uppercase font-semibold" align="center">Yêu cầu bán hàng</h1>
+<div mat-dialog-content>
+  <p>Bạn có thể đăng sản phẩm mới lên sàn đấu giá trong 7 ngày sau khi được quản trị viên phê duyệt. Khi hết hạn, bạn
+    sẽ được tự động hạ cấp thành bidder. Quản trị viên cũng có thể hạ cấp tài khoản của bạn vào bất kì thời điểm nào.
+  </p>
+  <form [formGroup]="requestUpgradeForm" class="my-2">
+    <mat-checkbox formControlName="agree">Tôi đồng ý với các quy định trên</mat-checkbox>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()" [disabled]="updateUserStatus === StoreStatus.LOADING">Hủy</button>
+  <button mat-button (click)="onRequestUpgradeSubmit()"
+    [disabled]="requestUpgradeForm.controls.agree.errors?.required || updateUserStatus === StoreStatus.LOADING">
+    Xác nhận
+  </button>
+</div>

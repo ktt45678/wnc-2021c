@@ -45,7 +45,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Tùy chọn</th>
           <td mat-cell *matCellDef="let element">
-            <button mat-icon-button>
+            <button mat-icon-button (click)="removeProductDialog(element)">
               <mat-icon>delete</mat-icon>
             </button>
           </td>

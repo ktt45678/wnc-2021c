@@ -128,3 +128,59 @@ export const findRelatedProductsSuccess = createAction(
 export const findRelatedProductsFailure = createAction(
   '[Products] Find Related Products Failure'
 );
+
+export const findSaleProducts = createAction(
+  '[Products] Find Sale Products',
+  props<IPaginateProducts>()
+);
+
+export const findSaleProductsSuccess = createAction(
+  '[Products] Find Sale Products Success',
+  props<{ payload: Paginated<Product> }>()
+);
+
+export const findSaleProductsFailure = createAction(
+  '[Products] Find Sale Products Failure'
+);
+
+export const findBiddedProducts = createAction(
+  '[Products] Find Bidded Products',
+  props<IPaginateProducts>()
+);
+
+export const findBiddedProductsSuccess = createAction(
+  '[Products] Find Bidded Products Success',
+  props<{ payload: Paginated<Product> }>()
+);
+
+export const findBiddedProductsFailure = createAction(
+  '[Products] Find Bidded Products Failure'
+);
+
+export const findWinningProducts = createAction(
+  '[Products] Find Winning Products',
+  props<IPaginateProducts>()
+);
+
+export const findWinningProductsSuccess = createAction(
+  '[Products] Find Winning Products Success',
+  props<{ payload: Paginated<Product> }>()
+);
+
+export const findWinningProductsFailure = createAction(
+  '[Products] Find Winning Products Failure'
+);
+
+export const findFavoriteProducts = createAction(
+  '[Products] Find Favorite Products',
+  props<IPaginateProducts>()
+);
+
+export const findFavoriteProductsSuccess = createAction(
+  '[Products] Find Favorite Products Success',
+  props<{ payload: Paginated<Product> }>()
+);
+
+export const findFavoriteProductsFailure = createAction(
+  '[Products] Find Favorite Products Failure'
+);

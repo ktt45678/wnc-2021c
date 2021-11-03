@@ -84,4 +84,4 @@ export const bidReducer = createReducer(
     ...state,
     getBidHintStatus: StoreStatus.FAILURE
   }))
-)
+);

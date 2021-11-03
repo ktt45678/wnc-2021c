@@ -1,0 +1,46 @@
+<h1 mat-dialog-title class="uppercase font-semibold" align="center">Sửa thông tin</h1>
+<div mat-dialog-content>
+  <div [formGroup]="updateInfoForm">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Họ tên</mat-label>
+      <input type="text" formControlName="fullName" matInput
+        [disabledControl]="updateUserStatus === StoreStatus.LOADING">
+      <mat-error *ngIf="updateInfoForm.controls.fullName.errors?.minlength; else fullNameMaxLength">
+        Họ tên phải <strong>ít nhất 3 kí tự</strong>
+      </mat-error>
+      <ng-template #fullNameMaxLength>
+        <mat-error *ngIf="updateInfoForm.controls.fullName.errors?.maxlength">
+          Họ tên <strong>không vượt quá 50 kí tự</strong>
+        </mat-error>
+      </ng-template>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Ngày sinh</mat-label>
+      <input formControlName="birthdate" matInput [max]="maxBirthdate" [matDatepicker]="datePickerBirthdate"
+        [disabledControl]="updateUserStatus === StoreStatus.LOADING">
+      <mat-datepicker-toggle matSuffix [for]="datePickerBirthdate"></mat-datepicker-toggle>
+      <mat-datepicker #datePickerBirthdate></mat-datepicker>
+      <mat-error *ngIf="updateInfoForm.controls.birthdate.errors?.required">
+        Ngày sinh phải <strong>hợp lệ</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Địa chỉ liên lạc</mat-label>
+      <input type="text" formControlName="address" matInput
+        [disabledControl]="updateUserStatus === StoreStatus.LOADING">
+      <mat-error *ngIf="updateInfoForm.controls.address.errors?.minlength; else addressMaxLength">
+        Địa chỉ liên lạc phải <strong>ít nhất 3 kí tự</strong>
+      </mat-error>
+      <ng-template #addressMaxLength>
+        <mat-error *ngIf="updateInfoForm.controls.address.errors?.maxlength">
+          Địa chỉ liên lạc <strong>không vượt quá 200 kí tự</strong>
+        </mat-error>
+      </ng-template>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()" [disabled]="updateUserStatus === StoreStatus.LOADING">Hủy</button>
+  <button mat-button (click)="onUpdateInfoSubmit()" [disabled]="updateUserStatus === StoreStatus.LOADING">Xác
+    nhận</button>
+</div>

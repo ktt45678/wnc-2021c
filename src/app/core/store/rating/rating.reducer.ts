@@ -1,14 +1,19 @@
 import { createReducer, on } from '@ngrx/store';
-import { createRating, createRatingFailure, createRatingSuccess } from '.';
 
+import { createRating, createRatingFailure, createRatingSuccess, findAllRatings, findAllRatingsFailure, findAllRatingsSuccess } from '.';
 import { StoreStatus } from '../../enums/store-status.enum';
+import { Paginated, Rating } from '../../models';
 
 export interface RatingState {
   createRatingStatus: StoreStatus;
+  findAllRatingsStatus: StoreStatus;
+  ratingList: Paginated<Rating>;
 }
 
 export const initialState: RatingState = {
-  createRatingStatus: StoreStatus.INIT
+  createRatingStatus: StoreStatus.INIT,
+  findAllRatingsStatus: StoreStatus.INIT,
+  ratingList: new Paginated<Rating>()
 }
 
 export const ratingReducer = createReducer(
@@ -24,5 +29,18 @@ export const ratingReducer = createReducer(
   on(createRatingFailure, (state) => ({
     ...state,
     createRatingStatus: StoreStatus.FAILURE
+  })),
+  on(findAllRatings, (state) => ({
+    ...state,
+    findAllRatingsStatus: StoreStatus.LOADING
+  })),
+  on(findAllRatingsSuccess, (state, action) => ({
+    ...state,
+    ratingList: action.payload,
+    findAllRatingsStatus: StoreStatus.SUCCESS
+  })),
+  on(findAllRatingsFailure, (state) => ({
+    ...state,
+    findAllRatingsStatus: StoreStatus.FAILURE
   }))
-)
+);

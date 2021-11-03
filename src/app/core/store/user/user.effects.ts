@@ -37,7 +37,7 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(updateUser),
       switchMap(action =>
-        this.usersService.update(action.id, action.fullName, action.email, action.birthdate, action.address, action.currentPassword, action.password, action.role, action.canSellUntil).pipe(
+        this.usersService.update(action.id, action.fullName, action.email, action.birthdate, action.address, action.currentPassword, action.password, action.requestUpgrade, action.upgrade, action.downgrade, action.banned).pipe(
           map(data => {
             this.snackBar.open('Cập nhật thành công', 'Đóng', { duration: 10000 });
             return updateUserSuccess({ payload: data });

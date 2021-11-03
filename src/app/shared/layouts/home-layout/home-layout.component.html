@@ -37,6 +37,9 @@
         <div class="ml-auto">
           <ng-container *ngrxLet="user$ as user">
             <div class="space-x-2">
+              <a mat-icon-button routerLink="/home/find-products" matTooltip="Tìm kiếm">
+                <mat-icon>search</mat-icon>
+              </a>
               <ng-container *ngIf="user">
                 <button mat-icon-button matTooltip="Thông báo đấu giá" [matBadge]="notificationCount"
                   matBadgeSize="small" matBadgeColor="warn" [matMenuTriggerFor]="notificationList"
@@ -61,14 +64,16 @@
                     </ng-container>
                   </ng-template>
                 </mat-menu>
-              </ng-container>
-              <a mat-icon-button routerLink="/home/find-products" matTooltip="Tìm kiếm">
-                <mat-icon>search</mat-icon>
-              </a>
-              <ng-container *ngIf="user && user.role === Role.SELLER">
-                <a mat-icon-button routerLink="/home/create-product" matTooltip="Bán sản phẩm">
-                  <mat-icon>add</mat-icon>
-                </a>
+                <ng-container *ngIf="user.role !== Role.ADMIN">
+                  <a mat-icon-button routerLink="/home/profiles" matTooltip="Hồ sơ cá nhân">
+                    <mat-icon>person</mat-icon>
+                  </a>
+                </ng-container>
+                <ng-container *ngIf="user.role === Role.SELLER">
+                  <a mat-icon-button routerLink="/home/create-product" matTooltip="Bán sản phẩm">
+                    <mat-icon>add</mat-icon>
+                  </a>
+                </ng-container>
               </ng-container>
             </div>
           </ng-container>

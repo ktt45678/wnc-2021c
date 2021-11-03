@@ -21,7 +21,7 @@ export class SignUpComponent implements OnInit {
   StoreStatus = StoreStatus;
   hidePassword: boolean = true;
   signUpForm: FormGroup;
-  maxBirthdate: Date;
+  maxBirthdate: Date = new Date();
 
   signUpStatus$: Observable<StoreStatus>;
 
@@ -37,7 +37,6 @@ export class SignUpComponent implements OnInit {
     }, {
       validators: controlMatches('confirmPassword', 'password')
     });
-    this.maxBirthdate = new Date();
     this.signUpStatus$ = store.select(state => state.auth.signUpStatus);
   }
 

@@ -7,6 +7,7 @@ import { categoryReducer, CategoryState, CategoryEffects } from './category';
 import { productReducer, ProductState, ProductEffects } from './product';
 import { bidReducer, BidState, BidEffects } from './bid';
 import { ratingReducer, RatingState, RatingEffects } from './rating';
+import { favoriteReducer, FavoriteState, FavoriteEffects } from './favorite';
 
 export interface AppState {
   auth: AuthState;
@@ -15,6 +16,7 @@ export interface AppState {
   product: ProductState;
   bid: BidState;
   rating: RatingState;
+  favorite: FavoriteState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -23,7 +25,8 @@ export const reducers: ActionReducerMap<AppState> = {
   category: categoryReducer,
   product: productReducer,
   bid: bidReducer,
-  rating: ratingReducer
+  rating: ratingReducer,
+  favorite: favoriteReducer
 };
 
 export const effects: Type<any>[] = [
@@ -32,5 +35,6 @@ export const effects: Type<any>[] = [
   CategoryEffects,
   ProductEffects,
   BidEffects,
-  RatingEffects
+  RatingEffects,
+  FavoriteEffects
 ];

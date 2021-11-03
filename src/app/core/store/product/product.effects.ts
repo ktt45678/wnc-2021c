@@ -4,7 +4,7 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { findAllProducts, findAllProductsSuccess, findAllProductsFailure, findOneProduct, findOneProductFailure, findOneProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, createProduct, createProductFailure, createProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess, findRelatedProductsSuccess, findRelatedProductsFailure, findRelatedProducts } from '.';
+import { findAllProducts, findAllProductsSuccess, findAllProductsFailure, findOneProduct, findOneProductFailure, findOneProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, createProduct, createProductFailure, createProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess, findRelatedProductsSuccess, findRelatedProductsFailure, findRelatedProducts, findSaleProducts, findSaleProductsFailure, findSaleProductsSuccess, findBiddedProducts, findBiddedProductsFailure, findBiddedProductsSuccess, findWinningProducts, findWinningProductsFailure, findWinningProductsSuccess, findFavoriteProducts, findFavoriteProductsFailure, findFavoriteProductsSuccess } from '.';
 import { ProductsService } from '../../services/products.service';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class ProductEffects {
     this.actions$.pipe(
       ofType(findAllProducts),
       switchMap(action =>
-        this.productsService.findAll(action.page, action.limit, action.search, action.sort, action.category, action.ended, action.seller, action.winner).pipe(
+        this.productsService.findAll(action.page, action.limit, action.search, action.sort, action.category, action.ended).pipe(
           map(data => findAllProductsSuccess({ payload: data })),
           catchError(() => of(findAllProductsFailure()))
         )
@@ -118,9 +118,57 @@ export class ProductEffects {
     this.actions$.pipe(
       ofType(findRelatedProducts),
       switchMap(action =>
-        this.productsService.findAll(1, 5, undefined, 'asc(_id)', action.category, false, undefined, undefined, action.except).pipe(
+        this.productsService.findAll(1, 5, undefined, 'asc(_id)', action.category, false, undefined, undefined, undefined, undefined, action.except).pipe(
           map(data => findRelatedProductsSuccess({ payload: data.results })),
           catchError(() => of(findRelatedProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findSaleProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findSaleProducts),
+      switchMap(action =>
+        this.productsService.findAll(action.page, action.limit, action.search, action.sort, action.category, action.ended, action.saleFilter).pipe(
+          map(data => findSaleProductsSuccess({ payload: data })),
+          catchError(() => of(findSaleProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findBiddedProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findBiddedProducts),
+      switchMap(action =>
+        this.productsService.findAll(action.page, action.limit, action.search, action.sort, action.category, false, undefined, true).pipe(
+          map(data => findBiddedProductsSuccess({ payload: data })),
+          catchError(() => of(findBiddedProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findWinningProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findWinningProducts),
+      switchMap(action =>
+        this.productsService.findAll(action.page, action.limit, action.search, action.sort, action.category, true, undefined, undefined, true).pipe(
+          map(data => findWinningProductsSuccess({ payload: data })),
+          catchError(() => of(findWinningProductsFailure()))
+        )
+      )
+    )
+  );
+
+  findFavoriteProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findFavoriteProducts),
+      switchMap(action =>
+        this.productsService.findAll(action.page, action.limit, action.search, action.sort, action.category, undefined, undefined, undefined, undefined, true).pipe(
+          map(data => findFavoriteProductsSuccess({ payload: data })),
+          catchError(() => of(findFavoriteProductsFailure()))
         )
       )
     )

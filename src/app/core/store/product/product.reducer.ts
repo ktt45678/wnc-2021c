@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 
 import { StoreStatus } from '../../enums/store-status.enum';
 import { Product, Paginated } from '../../models';
-import { createProduct, createProductFailure, createProductSuccess, destroyProducts, findAllProducts, findAllProductsFailure, findAllProductsSuccess, findOneProduct, findOneProductFailure, findOneProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess, findRelatedProducts, findRelatedProductsFailure, findRelatedProductsSuccess } from './product.actions';
+import { createProduct, createProductFailure, createProductSuccess, destroyProducts, findAllProducts, findAllProductsFailure, findAllProductsSuccess, findOneProduct, findOneProductFailure, findOneProductSuccess, removeProduct, removeProductFailure, removeProductSuccess, updateProduct, updateProductFailure, updateProductSuccess, findTopEndProducts, findTopEndProductsFailure, findTopEndProductsSuccess, findTopBidProducts, findTopBidProductsFailure, findTopBidProductsSuccess, findTopPriceProducts, findTopPriceProductsFailure, findTopPriceProductsSuccess, findRelatedProducts, findRelatedProductsFailure, findRelatedProductsSuccess, findSaleProducts, findSaleProductsFailure, findSaleProductsSuccess, findBiddedProducts, findBiddedProductsFailure, findBiddedProductsSuccess, findFavoriteProducts, findFavoriteProductsFailure, findFavoriteProductsSuccess, findWinningProducts, findWinningProductsFailure, findWinningProductsSuccess } from './product.actions';
 
 export interface ProductState {
   findAllProductsStatus: StoreStatus;
@@ -14,8 +14,16 @@ export interface ProductState {
   findTopBidProductsStatus: StoreStatus;
   findTopPriceProductsStatus: StoreStatus;
   findRelatedProductsStatus: StoreStatus;
+  findSaleProductsStatus: StoreStatus;
+  findBiddedProductsStatus: StoreStatus;
+  findWinningProductsStatus: StoreStatus;
+  findFavoriteProductsStatus: StoreStatus;
   product: Product | null;
   productList: Paginated<Product>;
+  saleProducts: Paginated<Product>;
+  biddedProducts: Paginated<Product>;
+  winningProducts: Paginated<Product>;
+  favoriteProducts: Paginated<Product>;
   topEndProducts: Product[];
   topBidProducts: Product[];
   topPriceProducts: Product[];
@@ -32,8 +40,16 @@ export const initialState: ProductState = {
   findTopBidProductsStatus: StoreStatus.INIT,
   findTopPriceProductsStatus: StoreStatus.INIT,
   findRelatedProductsStatus: StoreStatus.INIT,
+  findSaleProductsStatus: StoreStatus.INIT,
+  findBiddedProductsStatus: StoreStatus.INIT,
+  findWinningProductsStatus: StoreStatus.INIT,
+  findFavoriteProductsStatus: StoreStatus.INIT,
   product: null,
   productList: new Paginated<Product>(),
+  saleProducts: new Paginated<Product>(),
+  biddedProducts: new Paginated<Product>(),
+  winningProducts: new Paginated<Product>(),
+  favoriteProducts: new Paginated<Product>(),
   topEndProducts: [],
   topBidProducts: [],
   topPriceProducts: [],
@@ -159,5 +175,57 @@ export const productReducer = createReducer(
   on(findRelatedProductsFailure, (state) => ({
     ...state,
     findRelatedProductsStatus: StoreStatus.FAILURE
+  })),
+  on(findSaleProducts, (state) => ({
+    ...state,
+    findSaleProductsStatus: StoreStatus.LOADING
+  })),
+  on(findSaleProductsSuccess, (state, action) => ({
+    ...state,
+    saleProducts: action.payload,
+    findSaleProductsStatus: StoreStatus.SUCCESS
+  })),
+  on(findSaleProductsFailure, (state) => ({
+    ...state,
+    findSaleProductsStatus: StoreStatus.FAILURE
+  })),
+  on(findBiddedProducts, (state) => ({
+    ...state,
+    findBiddedProductsStatus: StoreStatus.LOADING
+  })),
+  on(findBiddedProductsSuccess, (state, action) => ({
+    ...state,
+    biddedProducts: action.payload,
+    findBiddedProductsStatus: StoreStatus.SUCCESS
+  })),
+  on(findBiddedProductsFailure, (state) => ({
+    ...state,
+    findBiddedProductsStatus: StoreStatus.FAILURE
+  })),
+  on(findWinningProducts, (state) => ({
+    ...state,
+    findWinningProductsStatus: StoreStatus.LOADING
+  })),
+  on(findWinningProductsSuccess, (state, action) => ({
+    ...state,
+    winningProducts: action.payload,
+    findWinningProductsStatus: StoreStatus.SUCCESS
+  })),
+  on(findWinningProductsFailure, (state) => ({
+    ...state,
+    findWinningProductsStatus: StoreStatus.FAILURE
+  })),
+  on(findFavoriteProducts, (state) => ({
+    ...state,
+    findFavoriteProductsStatus: StoreStatus.LOADING
+  })),
+  on(findFavoriteProductsSuccess, (state, action) => ({
+    ...state,
+    favoriteProducts: action.payload,
+    findFavoriteProductsStatus: StoreStatus.SUCCESS
+  })),
+  on(findFavoriteProductsFailure, (state) => ({
+    ...state,
+    findFavoriteProductsStatus: StoreStatus.FAILURE
   }))
 );

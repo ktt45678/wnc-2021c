@@ -23,6 +23,12 @@ import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layout.module';
 import { RelativeTimeModule } from '../../core/pipes/relative-time';
+import { RemoveProductComponent } from './dialogs/remove-product/remove-product.component';
+import { UpgradeUserComponent } from './dialogs/upgrade-user/upgrade-user.component';
+import { DowngradeUserComponent } from './dialogs/downgrade-user/downgrade-user.component';
+import { UpdateUserComponent } from './dialogs/update-user/update-user.component';
+import { BanUserComponent } from './dialogs/ban-user/ban-user.component';
+import { UnbanUserComponent } from './dialogs/unban-user/unban-user.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +38,13 @@ import { RelativeTimeModule } from '../../core/pipes/relative-time';
     RemoveCategoryComponent,
     UsersComponent,
     ProductsComponent,
-    ViewCategoryComponent
+    ViewCategoryComponent,
+    RemoveProductComponent,
+    UpgradeUserComponent,
+    DowngradeUserComponent,
+    UpdateUserComponent,
+    BanUserComponent,
+    UnbanUserComponent
   ],
   imports: [
     CommonModule,

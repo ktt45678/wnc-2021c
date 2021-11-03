@@ -1,7 +1,7 @@
 import { Bid, Category, Rating, User } from '.';
 
 export class Product {
-  _id?: number;
+  _id!: number;
   name!: string;
   description!: string;
   category!: Category;
@@ -28,4 +28,5 @@ export class Product {
   blacklisted?: boolean;
   whitelisted?: boolean;
   requestedUser?: boolean;
+  favorited?: boolean;
 }

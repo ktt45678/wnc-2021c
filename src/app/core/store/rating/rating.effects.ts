@@ -4,8 +4,9 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { createRating, createRatingFailure, createRatingSuccess } from '.';
+import { createRating, createRatingFailure, createRatingSuccess, findAllRatings, findAllRatingsFailure, findAllRatingsSuccess } from '.';
 import { ProductsService } from '../../services/products.service';
+import { RatingsService } from '../../services/ratings.service';
 
 @Injectable()
 export class RatingEffects {
@@ -24,5 +25,17 @@ export class RatingEffects {
     )
   );
 
-  constructor(private actions$: Actions, private productsService: ProductsService, private snackBar: MatSnackBar) { }
+  findAllRatings$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(findAllRatings),
+      switchMap(action =>
+        this.ratingsService.findAll(action.page, action.limit, action.sort, action.target).pipe(
+          map(data => findAllRatingsSuccess({ payload: data })),
+          catchError(() => of(findAllRatingsFailure()))
+        )
+      )
+    )
+  );
+
+  constructor(private actions$: Actions, private productsService: ProductsService, private ratingsService: RatingsService, private snackBar: MatSnackBar) { }
 }

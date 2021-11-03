@@ -51,7 +51,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.loadUsers();
     const search$ = fromEvent(this.searchInput.nativeElement, 'keyup').pipe(debounceTime(200), distinctUntilChanged(), tap(() => this.paginator.pageIndex = 0));
-    const select$ = this.typeSelect.selectionChange.pipe(tap(() => this.paginator.pageIndex = 0));
+    const select$ = this.typeSelect.selectionChange.pipe(distinctUntilChanged(), tap(() => this.paginator.pageIndex = 0));
     const sort$ = this.sort.sortChange.pipe(tap(() => this.paginator.pageIndex = 0));
     merge(search$, select$, sort$, this.paginator.page).pipe(
       tap(() => this.loadUsers()),

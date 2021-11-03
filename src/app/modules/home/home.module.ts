@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
@@ -18,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeLayoutModule } from '../../shared/layouts/home-layout/home-layout.module';
@@ -30,13 +32,20 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { CreateProductComponent } from './pages/create-product/create-product.component';
 import { FindProductsComponent } from './pages/find-products/find-products.component';
+import { ProfilesComponent } from './pages/profiles/profiles.component';
+import { UpdateInfoModule } from '../../shared/dialogs/update-info/update-info.module';
+import { UpdateEmailModule } from '../../shared/dialogs/update-email/update-email.module';
+import { UpdatePasswordModule } from '../../shared/dialogs/update-password/update-password.module';
+import { RequestUpgradeComponent } from './dialogs/request-upgrade/request-upgrade.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ProductsComponent,
     CreateProductComponent,
-    FindProductsComponent
+    FindProductsComponent,
+    ProfilesComponent,
+    RequestUpgradeComponent
   ],
   imports: [
     CommonModule,
@@ -51,10 +60,14 @@ import { FindProductsComponent } from './pages/find-products/find-products.compo
     ReactiveComponentModule,
     QuillModule,
     SocketIoModule,
+    UpdateInfoModule,
+    UpdateEmailModule,
+    UpdatePasswordModule,
     MatIconModule,
     MatButtonModule,
     MatSlideToggleModule,
     MatFormFieldModule,
+    MatCheckboxModule,
     MatSelectModule,
     MatRadioModule,
     MatInputModule,
@@ -64,7 +77,8 @@ import { FindProductsComponent } from './pages/find-products/find-products.compo
     MatTooltipModule,
     MatPaginatorModule,
     MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDialogModule
   ]
 })
 export class HomeModule { }

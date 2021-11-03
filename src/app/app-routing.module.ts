@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
+import { Role } from './core/enums/role.enum';
+import { AuthGuard } from './core/guards/auth.guard';
+
 const routes: Routes = [
   {
     path: '',
@@ -17,7 +20,17 @@ const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [AuthGuard],
+    data: {
+      roles: [Role.ADMIN],
+      fromJwt: true
+    },
     loadChildren: () => import('./modules/admin/admin.module').then(m => m.AdminModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+    pathMatch: 'full'
   }
 ];
 

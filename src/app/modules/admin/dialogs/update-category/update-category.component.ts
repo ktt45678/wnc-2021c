@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { ICreateCategory } from 'src/app/core/interfaces/categories';
 
 import { Category } from '../../../../core/models';
 import { AppState } from '../../../../core/store';
@@ -21,7 +20,7 @@ export class UpdateCategoryComponent implements OnInit {
     this.updateCategoryForm = new FormGroup({
       name: new FormControl(this.category.name, [Validators.required, Validators.maxLength(32)]),
       subName: new FormControl(this.category.subName, [Validators.required, Validators.maxLength(32)])
-    })
+    });
   }
 
   ngOnInit(): void {
