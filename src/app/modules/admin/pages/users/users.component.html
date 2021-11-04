@@ -43,7 +43,8 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Tùy chọn</th>
           <td mat-cell *matCellDef="let element">
-            <button mat-icon-button [matMenuTriggerFor]="actionMenu" [matMenuTriggerData]="{element}">
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu" [matMenuTriggerData]="{element}"
+              [disabled]="(user$ | async)?._id === element._id">
               <mat-icon>more_vert</mat-icon>
             </button>
           </td>
@@ -55,9 +56,15 @@
     <mat-paginator [length]="totalUsers || 0" [pageSize]="10" [pageSizeOptions]="[5, 10, 15]"></mat-paginator>
     <mat-menu #actionMenu="matMenu" xPosition="before">
       <ng-template matMenuContent let-element="element">
-        <button [routerLink]="['view', element.id]" mat-menu-item>Xem thông tin</button>
-        <button (click)="upgradeUser(element)" [disabled]="!element.requestUpgrade" mat-menu-item>Nâng cấp</button>
+        <button (click)="viewUserDialog(element)" mat-menu-item>Xem thông tin</button>
+        <button (click)="upgradeUser(element)" [disabled]="!element.requestUpgrade" mat-menu-item>
+          Đông ý nâng cấp
+        </button>
+        <button (click)="cancelUpgradeUser(element)" [disabled]="!element.requestUpgrade" mat-menu-item>
+          Từ chối nâng cấp
+        </button>
         <button (click)="downgradeUser(element)" [disabled]="element.role !== Role.SELLER" mat-menu-item>Hạ cấp</button>
+        <button (click)="updateUserDialog(element)" mat-menu-item>Cập nhật</button>
       </ng-template>
     </mat-menu>
   </ng-container>

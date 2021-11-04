@@ -188,17 +188,15 @@
               <ng-template #noRating>
                 <div *ngIf="!currentUser.ratingCount && !product.whitelisted; else canBid">
                   <p>Bạn có thể tham gia đấu giá sau khi được người bán cho phép</p>
-                  <button class="!mt-2" mat-flat-button color="primary" (click)="onRequestBid()"
-                    *ngIf="!product.requestedUser; else pendingRequest"
-                    [disabled]="(requestBidStatus$ | async) === StoreStatus.LOADING">Yêu cầu đấu
-                    giá</button>
-                  <ng-template #pendingRequest>
-                    <p>Bạn đã yêu cầu ra giá, vui lòng đợi người bán phê duyệt</p>
-                  </ng-template>
+                  <button class="!my-2" mat-flat-button color="primary" (click)="onRequestBid()"
+                    [disabled]="((requestBidStatus$ | async) === StoreStatus.LOADING) || product.requestedUser">
+                    Yêu cầu đấu giá
+                  </button>
+                  <p *ngIf="product.requestedUser">Bạn đã yêu cầu ra giá, vui lòng đợi người bán phê duyệt</p>
                 </div>
               </ng-template>
               <ng-template #canBid>
-                <div class="m-4 p-4 shadow-sm bg-white rounded">
+                <div class=" m-4 p-4 shadow-sm bg-white rounded">
                   <div class="my-2">
                     <div class="mb-4">
                       <p>Giá khởi điểm: <strong>{{ product.startingPrice | currency:'VND' }}</strong></p>

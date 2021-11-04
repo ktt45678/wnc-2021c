@@ -1,0 +1,30 @@
+<h1 mat-dialog-title class="uppercase font-semibold" align="center">Thông tin người dùng</h1>
+<div mat-dialog-content>
+  <mat-spinner class="block mx-auto" *ngIf="findOneUserStatus === StoreStatus.LOADING; else userLoaded"></mat-spinner>
+  <ng-template #userLoaded>
+    <ng-container *ngIf="(selectedUser$ | async) as selectedUser; else userNotLoaded">
+      <p class="leading-7">Họ tên: <strong>{{ selectedUser.fullName }}</strong></p>
+      <p class="leading-7">Vai trò: <strong class="capitalize">{{ selectedUser.role }}</strong></p>
+      <p class="leading-7">Email: <strong>{{ selectedUser.email }}</strong></p>
+      <p class="leading-7">
+        Ngày sinh:
+        <strong>
+          {{ selectedUser.birthdate ? (selectedUser.birthdate | date:'dd/MM/yyyy') : 'Không có' }}
+        </strong>
+      </p>
+      <p class="leading-7">Địa chỉ: <strong>{{ selectedUser.address }}</strong></p>
+      <p class="leading-7">Ngày tham gia: <strong>{{ selectedUser.createdAt | date:'dd/MM/yyyy' }}</strong></p>
+      <p class="leading-7">Số lần được đánh giá: <strong>{{ selectedUser.ratingCount }}</strong></p>
+      <p class="leading-7">Điểm hiện tại: <strong>{{ selectedUser.point }}</strong></p>
+      <p class="leading-7" *ngIf="selectedUser.canSellUntil">
+        Được phép bán hàng đến: <strong>{{ selectedUser.canSellUntil | date:'dd/MM/yyyy' }}</strong>
+      </p>
+    </ng-container>
+  </ng-template>
+  <ng-template #userNotLoaded>
+    <p class="text-center">Không có thông tin</p>
+  </ng-template>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">Đóng</button>
+</div>

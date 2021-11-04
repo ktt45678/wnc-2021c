@@ -12,6 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { CategoriesComponent } from './pages/categories/categories.component';
@@ -23,8 +26,11 @@ import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { AdminLayoutModule } from '../../shared/layouts/admin-layout/admin-layout.module';
 import { RelativeTimeModule } from '../../core/pipes/relative-time';
+import { DisabledControlModule } from '../../core/directives/disabled-control';
 import { RemoveProductComponent } from './dialogs/remove-product/remove-product.component';
 import { ProfilesComponent } from './pages/profiles/profiles.component';
+import { ViewUserComponent } from './dialogs/view-user/view-user.component';
+import { UpdateUserComponent } from './dialogs/update-user/update-user.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +42,9 @@ import { ProfilesComponent } from './pages/profiles/profiles.component';
     ProductsComponent,
     ViewCategoryComponent,
     RemoveProductComponent,
-    ProfilesComponent
+    ProfilesComponent,
+    ViewUserComponent,
+    UpdateUserComponent
   ],
   imports: [
     CommonModule,
@@ -45,6 +53,7 @@ import { ProfilesComponent } from './pages/profiles/profiles.component';
     ReactiveFormsModule,
     ReactiveComponentModule,
     RelativeTimeModule,
+    DisabledControlModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -54,7 +63,10 @@ import { ProfilesComponent } from './pages/profiles/profiles.component';
     MatInputModule,
     MatIconModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDatepickerModule,
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
   ]
 })
 export class AdminModule { }

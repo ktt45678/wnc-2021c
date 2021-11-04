@@ -14,6 +14,9 @@
           <p class="leading-7">Địa chỉ: <strong>{{ currentUser.address }}</strong></p>
           <p class="leading-7">Ngày tham gia: <strong>{{ currentUser.createdAt | date:'dd/MM/yyyy' }}</strong></p>
           <p class="leading-7">Số lần được đánh giá: <strong>{{ currentUser.ratingCount }}</strong></p>
+          <p class="leading-7" *ngIf="currentUser.canSellUntil">
+            Được phép bán hàng đến: <strong>{{ currentUser.canSellUntil | date:'dd/MM/yyyy' }}</strong>
+          </p>
           <div class="inline-flex leading-7">
             <p>Điểm hiện tại: <strong>{{ currentUser.point }}</strong></p>
             <div class="ml-2" *ngIf="currentUser.ratingCount">

@@ -5,7 +5,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
 
 import { DestroyService } from '../../../../core/services/destroy.service';
 import { StoreStatus } from '../../../../core/enums/store-status.enum';
@@ -50,13 +50,11 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadProducts();
     const search$ = fromEvent(this.searchInput.nativeElement, 'keyup').pipe(debounceTime(200), distinctUntilChanged(), tap(() => this.paginator.pageIndex = 0));
     const sort$ = this.sort.sortChange.pipe(tap(() => this.paginator.pageIndex = 0));
-    merge(search$, sort$, this.paginator.page).pipe(
+    const removeProductSuccess$ = this.removeProductStatus$.pipe(filter(status => status === StoreStatus.SUCCESS));
+    merge(search$, sort$, this.paginator.page, removeProductSuccess$).pipe(
       tap(() => this.loadProducts()),
       takeUntil(this.destroyService)
     ).subscribe();
-    this.removeProductStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      status === StoreStatus.SUCCESS && this.loadProducts();
-    });
   }
 
   ngOnDestroy(): void {

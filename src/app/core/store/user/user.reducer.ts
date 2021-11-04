@@ -2,7 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 
 import { StoreStatus } from '../../enums/store-status.enum';
 import { User, Paginated } from '../../models';
-import { destroyUsers, findAllUsers, findAllUsersFailure, findAllUsersSuccess, findCurrentUser, findCurrentUserFailure, findCurrentUserSuccess, findOneUser, findOneUserFailure, findOneUserSuccess, updateUser, updateUserFailure, updateUserSuccess, resetUpdateUser } from '.';
+import { destroyUsers, findAllUsers, findAllUsersFailure, findAllUsersSuccess, findCurrentUser, findCurrentUserFailure, findCurrentUserSuccess, findOneUser, findOneUserFailure, findOneUserSuccess, updateUser, updateUserFailure, updateUserSuccess, resetFindOneUser, resetUpdateUser } from '.';
 
 export interface UserState {
   findAllUsersStatus: StoreStatus;
@@ -84,6 +84,11 @@ export const userReducer = createReducer(
   })),
   on(destroyUsers, () => ({
     ...initialState
+  })),
+  on(resetFindOneUser, (state) => ({
+    ...state,
+    selectedUser: null,
+    findOneUserStatus: StoreStatus.INIT
   })),
   on(resetUpdateUser, (state) => ({
     ...state,

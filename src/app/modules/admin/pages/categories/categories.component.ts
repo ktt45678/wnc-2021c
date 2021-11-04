@@ -5,7 +5,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { fromEvent, merge, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
 
 import { DestroyService } from '../../../../core/services/destroy.service';
 import { StoreStatus } from '../../../../core/enums/store-status.enum';
@@ -57,19 +57,13 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loadCategories();
     const search$ = fromEvent(this.searchInput.nativeElement, 'keyup').pipe(debounceTime(200), distinctUntilChanged(), tap(() => this.paginator.pageIndex = 0));
     const sort$ = this.sort.sortChange.pipe(tap(() => this.paginator.pageIndex = 0));
-    merge(search$, sort$, this.paginator.page).pipe(
+    const createCategorySuccess$ = this.createCategoryStatus$.pipe(filter(status => status === StoreStatus.SUCCESS));
+    const updateCategorySuccess$ = this.updateCategoryStatus$.pipe(filter(status => status === StoreStatus.SUCCESS));
+    const removeCategorySuccess$ = this.removeCategoryStatus$.pipe(filter(status => status === StoreStatus.SUCCESS));
+    merge(search$, sort$, this.paginator.page, createCategorySuccess$, updateCategorySuccess$, removeCategorySuccess$).pipe(
       tap(() => this.loadCategories()),
       takeUntil(this.destroyService)
     ).subscribe();
-    this.createCategoryStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      status === StoreStatus.SUCCESS && this.loadCategories();
-    });
-    this.updateCategoryStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      status === StoreStatus.SUCCESS && this.loadCategories();
-    });
-    this.removeCategoryStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      status === StoreStatus.SUCCESS && this.loadCategories();
-    });
   }
 
   ngOnDestroy(): void {
@@ -91,27 +85,27 @@ export class CategoriesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   viewCategoryDialog(category: Category) {
     this.dialog.open(ViewCategoryComponent, {
-      width: '350px',
+      width: '450px',
       data: category
     });
   }
 
   createCategoryDialog() {
     this.dialog.open(CreateCategoryComponent, {
-      width: '350px'
+      width: '450px'
     });
   }
 
   updateCategoryDialog(category: Category) {
     this.dialog.open(UpdateCategoryComponent, {
-      width: '350px',
+      width: '450px',
       data: category
     });
   }
 
   removeCategoryDialog(category: Category) {
     this.dialog.open(RemoveCategoryComponent, {
-      width: '350px',
+      width: '450px',
       data: category
     });
   }
