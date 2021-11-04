@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpgradeUserComponent } from './upgrade-user.component';
+import { CancelPaymentComponent } from './cancel-payment.component';
 
-describe('UpgradeUserComponent', () => {
-  let component: UpgradeUserComponent;
-  let fixture: ComponentFixture<UpgradeUserComponent>;
+describe('CancelPaymentComponent', () => {
+  let component: CancelPaymentComponent;
+  let fixture: ComponentFixture<CancelPaymentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpgradeUserComponent ]
+      declarations: [ CancelPaymentComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UpgradeUserComponent);
+    fixture = TestBed.createComponent(CancelPaymentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

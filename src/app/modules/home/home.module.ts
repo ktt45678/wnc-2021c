@@ -37,6 +37,7 @@ import { UpdateInfoModule } from '../../shared/dialogs/update-info/update-info.m
 import { UpdateEmailModule } from '../../shared/dialogs/update-email/update-email.module';
 import { UpdatePasswordModule } from '../../shared/dialogs/update-password/update-password.module';
 import { RequestUpgradeComponent } from './dialogs/request-upgrade/request-upgrade.component';
+import { CancelPaymentComponent } from './dialogs/cancel-payment/cancel-payment.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { RequestUpgradeComponent } from './dialogs/request-upgrade/request-upgra
     CreateProductComponent,
     FindProductsComponent,
     ProfilesComponent,
-    RequestUpgradeComponent
+    RequestUpgradeComponent,
+    CancelPaymentComponent
   ],
   imports: [
     CommonModule,

@@ -304,7 +304,10 @@
                     </mat-error>
                   </mat-form-field>
                   <div class="flex my-2">
-                    <div class="ml-auto">
+                    <div class="ml-auto space-x-2">
+                      <button type="button" mat-flat-button color="primary" (click)="cancelPaymentDialog()"
+                        *ngIf="currentUser?._id === product.seller._id"
+                        [disabled]="createRatingStatus === StoreStatus.LOADING">Hủy giao dịch</button>
                       <button type="submit" mat-flat-button color="primary"
                         [disabled]="createRatingStatus === StoreStatus.LOADING">Gửi</button>
                     </div>

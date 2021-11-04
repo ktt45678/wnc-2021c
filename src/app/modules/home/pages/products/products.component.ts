@@ -2,9 +2,10 @@ import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { first, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Socket } from 'ngx-socket-io';
 import { cloneDeep } from 'lodash';
 
@@ -19,7 +20,8 @@ import { destroyUsers, findCurrentUser } from '../../../../core/store/user';
 import { approveBid, createBid, denyBid, requestBid } from '../../../../core/store/bid';
 import { createRating } from '../../../../core/store/rating';
 import { DestroyService } from '../../../../core/services/destroy.service';
-import { addToFavorite, removeFromFavorite } from 'src/app/core/store/favorite';
+import { addToFavorite, removeFromFavorite } from '../../../../core/store/favorite';
+import { CancelPaymentComponent } from '../../dialogs/cancel-payment/cancel-payment.component';
 
 @Component({
   selector: 'app-products',
@@ -61,7 +63,7 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
   currentUser$: Observable<User | null>;
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private router: Router, private socket: Socket,
-    private destroyService: DestroyService) {
+    private dialog: MatDialog, private destroyService: DestroyService) {
     this.updateProductForm = new FormGroup({
       description: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10000)])
     });
@@ -104,22 +106,26 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
         this.socket.emit(IoEvent.PRODUCTS_VIEW_JOIN, { id: this.productId });
       }
     });
-    this.findOneProductStatus$.pipe(switchMap(status => (status === StoreStatus.SUCCESS ? this.product$ : of(null))), takeUntil(this.destroyService)).subscribe(product => {
-      if (product) {
-        if (product.category)
-          this.store.dispatch(findRelatedProducts({ category: product.category._id, except: product._id }));
-        this.bidDataSource = new MatTableDataSource(product.bids);
-        this.blacklistDataSource = new MatTableDataSource(product.blacklist);
-        this.whitelistDataSource = new MatTableDataSource(product.whitelist);
-        this.requestedUsersDataSource = new MatTableDataSource(product.requestedUsers);
-        this.minBidPrice = !product.winner ? product.startingPrice : product.displayPrice + product.priceStep;
-        this.createBidForm.get('price')?.setValidators([Validators.required, Validators.min(this.minBidPrice), Validators.max(100_000_000_000)]);
-      }
-    });
-    this.updateProductStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
-      if (status === StoreStatus.SUCCESS)
-        this.updateProductForm.reset();
-    });
+    this.findOneProductStatus$.pipe(
+      filter((status => status === StoreStatus.SUCCESS)),
+      switchMap(() => this.product$),
+      tap(product => {
+        if (product) {
+          if (product.category)
+            this.store.dispatch(findRelatedProducts({ category: product.category._id, except: product._id }));
+          this.bidDataSource = new MatTableDataSource(product.bids);
+          this.blacklistDataSource = new MatTableDataSource(product.blacklist);
+          this.whitelistDataSource = new MatTableDataSource(product.whitelist);
+          this.requestedUsersDataSource = new MatTableDataSource(product.requestedUsers);
+          this.minBidPrice = !product.winner ? product.startingPrice : product.displayPrice + product.priceStep;
+          this.createBidForm.get('price')?.setValidators([Validators.required, Validators.min(this.minBidPrice), Validators.max(100_000_000_000)]);
+        }
+      }),
+      takeUntil(this.destroyService)).subscribe();
+    this.updateProductStatus$.pipe(
+      filter(status => status === StoreStatus.SUCCESS),
+      tap(() => this.updateProductForm.reset()),
+      takeUntil(this.destroyService)).subscribe();
     this.accessToken$.pipe(first(), tap(token => {
       if (token)
         this.store.dispatch(findCurrentUser());
@@ -157,7 +163,6 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
   onCreateRatingSubmit(): void {
     if (this.createRatingForm.invalid)
       return;
-    console.log(this.createRatingForm.value);
     if (this.productId)
       this.store.dispatch(createRating({ id: this.productId, ...this.createRatingForm.value }));
   }
@@ -177,7 +182,7 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
       this.store.dispatch(denyBid({ id: this.productId, user: user }));
   }
 
-  onFavorite() {
+  onFavorite(): void {
     if (!this.currentUser) {
       this.router.navigate(['/auth', 'sign-in']);
       return;
@@ -191,6 +196,21 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
         this.store.dispatch(removeFromFavorite({ id: this.product._id }));
       }
     }
+  }
+
+  cancelPaymentDialog(): void {
+    const dialogRef = this.dialog.open(CancelPaymentComponent, {
+      width: '450px',
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (this.productId && result) {
+        this.store.dispatch(createRating({
+          id: this.productId,
+          ratingType: RatingType.NEGATIVE,
+          comment: 'Người thắng không thanh toán'
+        }));
+      }
+    });
   }
 
   trackProduct(index: number, item: any) {
