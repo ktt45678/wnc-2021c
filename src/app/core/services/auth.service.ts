@@ -17,7 +17,9 @@ export class AuthService {
   constructor(private http: HttpClient, private socket: Socket) { }
 
   signIn(email: string, password: string) {
-    return this.http.post<Jwt>('auth/login', { email, password });
+    return this.http.post<Jwt>('auth/login', { email, password }).pipe(tap(tokens => {
+      this.startRefreshTokenTimer(tokens.accessToken, tokens.refreshToken);
+    }));
   }
 
   signUp(fullName: string, email: string, birthdate: Date, address: string, password: string, reCaptcha: string) {
