@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Xác nhận ra giá</h1>
+<div mat-dialog-content>
+  <h2>
+    Hãy chắc chắn rằng bạn có đủ số tiền để thanh toán trong trường hợp bạn là người chiến thắng
+  </h2>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">Hủy</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Xác nhận</button>
+</div>

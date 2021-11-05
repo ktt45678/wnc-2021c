@@ -31,6 +31,9 @@ import { RemoveProductComponent } from './dialogs/remove-product/remove-product.
 import { ProfilesComponent } from './pages/profiles/profiles.component';
 import { ViewUserComponent } from './dialogs/view-user/view-user.component';
 import { UpdateUserComponent } from './dialogs/update-user/update-user.component';
+import { UpdateInfoModule } from '../../shared/dialogs/update-info/update-info.module';
+import { UpdateEmailModule } from '../../shared/dialogs/update-email/update-email.module';
+import { UpdatePasswordModule } from '../../shared/dialogs/update-password/update-password.module';
 
 @NgModule({
   declarations: [
@@ -54,6 +57,9 @@ import { UpdateUserComponent } from './dialogs/update-user/update-user.component
     ReactiveComponentModule,
     RelativeTimeModule,
     DisabledControlModule,
+    UpdateInfoModule,
+    UpdateEmailModule,
+    UpdatePasswordModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,

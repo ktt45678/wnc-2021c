@@ -38,6 +38,7 @@ import { UpdateEmailModule } from '../../shared/dialogs/update-email/update-emai
 import { UpdatePasswordModule } from '../../shared/dialogs/update-password/update-password.module';
 import { RequestUpgradeComponent } from './dialogs/request-upgrade/request-upgrade.component';
 import { CancelPaymentComponent } from './dialogs/cancel-payment/cancel-payment.component';
+import { ConfirmBidComponent } from './dialogs/confirm-bid/confirm-bid.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CancelPaymentComponent } from './dialogs/cancel-payment/cancel-payment.
     FindProductsComponent,
     ProfilesComponent,
     RequestUpgradeComponent,
-    CancelPaymentComponent
+    CancelPaymentComponent,
+    ConfirmBidComponent
   ],
   imports: [
     CommonModule,

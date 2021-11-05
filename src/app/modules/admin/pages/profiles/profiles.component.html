@@ -1,1 +1,38 @@
-<p>profiles works!</p>
+<div class="my-14">
+  <div class="container mx-auto">
+    <div class="md:shadow-border max-w-lg mx-auto rounded overflow-hidden p-8">
+      <ng-container *ngrxLet="findCurrentUserStatus$ as findCurrentUserStatus">
+        <h2 class="mb-8 text-center text-4xl font-medium uppercase">Thông tin cá nhân</h2>
+        <div>
+          <mat-spinner class="block mx-auto" *ngIf="findCurrentUserStatus === StoreStatus.LOADING; else userLoaded">
+          </mat-spinner>
+          <ng-template #userLoaded>
+            <ng-container *ngIf="(currentUser$ | async) as currentUser; else userNotLoaded">
+              <p class="leading-7">Họ tên: <strong>{{ currentUser.fullName }}</strong></p>
+              <p class="leading-7">Vai trò: <strong class="capitalize">{{ currentUser.role }}</strong></p>
+              <p class="leading-7">Email: <strong>{{ currentUser.email }}</strong></p>
+              <p class="leading-7">
+                Ngày sinh:
+                <strong>
+                  {{ (currentUser.birthdate | date:'dd/MM/yyyy') || 'Không có' }}
+                </strong>
+              </p>
+              <p class="leading-7">Địa chỉ: <strong>{{ currentUser.address }}</strong></p>
+              <p class="leading-7">Ngày tham gia: <strong>{{ currentUser.createdAt | date:'dd/MM/yyyy' }}</strong></p>
+              <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-2">
+                <button mat-flat-button color="primary" (click)="updateInfoDialog(currentUser)">Sửa thông tin</button>
+                <button mat-flat-button color="primary" (click)="updateEmailDialog(currentUser)">Cập nhật email</button>
+                <button mat-flat-button color="primary" (click)="updatePasswordDialog(currentUser)">
+                  Đổi mật khẩu
+                </button>
+              </div>
+            </ng-container>
+          </ng-template>
+          <ng-template #userNotLoaded>
+            <p class="text-center">Không có thông tin</p>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

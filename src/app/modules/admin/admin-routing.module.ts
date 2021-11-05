@@ -5,6 +5,7 @@ import { AdminLayoutComponent } from '../../shared/layouts/admin-layout/admin-la
 import { CategoriesComponent } from './pages/categories/categories.component';
 import { UsersComponent } from './pages/users/users.component';
 import { ProductsComponent } from './pages/products/products.component';
+import { ProfilesComponent } from './pages/profiles/profiles.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,10 @@ const routes: Routes = [
       {
         path: 'products',
         component: ProductsComponent
+      },
+      {
+        path: 'profiles',
+        component: ProfilesComponent
       }
     ]
   }

@@ -9,11 +9,10 @@ import { distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 
 import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { Role } from '../../../../core/enums/role.enum';
-import { IoEvent } from '../../../../core/enums/io-event.enum';
 import { RatingType } from '../../../../core/enums/rating-type.enum';
 import { AppState } from '../../../../core/store';
 import { Paginated, Product, Rating, User } from '../../../../core/models';
-import { findCurrentUser, destroyUsers } from '../../../../core/store/user';
+import { findCurrentUser } from '../../../../core/store/user';
 import { findBiddedProducts, findFavoriteProducts, findSaleProducts, findWinningProducts } from '../../../../core/store/product';
 import { findAllRatings } from '../../../../core/store/rating';
 import { UpdateInfoComponent } from '../../../../shared/dialogs/update-info/update-info.component';
@@ -53,8 +52,7 @@ export class ProfilesComponent implements AfterViewInit, AfterContentInit {
   winningProducts$: Observable<Paginated<Product>>;
   favoriteProducts$: Observable<Paginated<Product>>;
 
-  constructor(private store: Store<AppState>, private socket: Socket,
-    private dialog: MatDialog, private destroyService: DestroyService) {
+  constructor(private store: Store<AppState>, private dialog: MatDialog, private destroyService: DestroyService) {
     this.findCurrentUserStatus$ = store.select(state => state.user.findCurrentUserStatus);
     this.findAllRatingsStatus$ = store.select(state => state.rating.findAllRatingsStatus);
     this.findSaleProductsStatus$ = store.select(state => state.product.findSaleProductsStatus);

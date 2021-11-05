@@ -8,9 +8,9 @@
         </mat-card-header>
         <mat-card-content>
           <p class="leading-7">Email: <strong>{{ currentUser.email }}</strong></p>
-          <p class="leading-7">Ngày sinh: <strong>{{ currentUser.birthdate ? (currentUser.birthdate | date:'dd/MM/yyyy')
-              : 'Không có'
-              }}</strong></p>
+          <p class="leading-7">
+            Ngày sinh: <strong>{{ (currentUser.birthdate | date:'dd/MM/yyyy') || 'Không có' }}</strong>
+          </p>
           <p class="leading-7">Địa chỉ: <strong>{{ currentUser.address }}</strong></p>
           <p class="leading-7">Ngày tham gia: <strong>{{ currentUser.createdAt | date:'dd/MM/yyyy' }}</strong></p>
           <p class="leading-7">Số lần được đánh giá: <strong>{{ currentUser.ratingCount }}</strong></p>

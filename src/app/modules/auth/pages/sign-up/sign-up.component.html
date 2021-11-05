@@ -34,9 +34,6 @@
                   [disabledControl]="signUpStatus === StoreStatus.LOADING">
                 <mat-datepicker-toggle matSuffix [for]="datePickerBirthdate"></mat-datepicker-toggle>
                 <mat-datepicker #datePickerBirthdate></mat-datepicker>
-                <mat-error *ngIf="signUpForm.controls.birthdate.errors?.required">
-                  Ngày sinh phải <strong>hợp lệ</strong>
-                </mat-error>
               </mat-form-field>
             </div>
             <mat-form-field appearance="outline" class="w-full">

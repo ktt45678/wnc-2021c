@@ -22,6 +22,7 @@ import { createRating } from '../../../../core/store/rating';
 import { DestroyService } from '../../../../core/services/destroy.service';
 import { addToFavorite, removeFromFavorite } from '../../../../core/store/favorite';
 import { CancelPaymentComponent } from '../../dialogs/cancel-payment/cancel-payment.component';
+import { ConfirmBidComponent } from '../../dialogs/confirm-bid/confirm-bid.component';
 
 @Component({
   selector: 'app-products',
@@ -156,8 +157,16 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
   onCreateBidSubmit(): void {
     if (this.createBidForm.invalid)
       return;
-    if (this.productId)
-      this.store.dispatch(createBid({ id: this.productId, ...this.createBidForm.value }));
+    if (this.productId) {
+      const dialogRef = this.dialog.open(ConfirmBidComponent, {
+        width: '450px',
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.store.dispatch(createBid({ id: this.productId, ...this.createBidForm.value }));
+        }
+      });
+    }
   }
 
   onCreateRatingSubmit(): void {
