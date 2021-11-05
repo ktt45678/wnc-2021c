@@ -23,6 +23,7 @@ import { DestroyService } from '../../../../core/services/destroy.service';
 import { addToFavorite, removeFromFavorite } from '../../../../core/store/favorite';
 import { CancelPaymentComponent } from '../../dialogs/cancel-payment/cancel-payment.component';
 import { ConfirmBidComponent } from '../../dialogs/confirm-bid/confirm-bid.component';
+import { ViewImageComponent } from '../../dialogs/view-image/view-image.component';
 
 @Component({
   selector: 'app-products',
@@ -159,7 +160,7 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
       return;
     if (this.productId) {
       const dialogRef = this.dialog.open(ConfirmBidComponent, {
-        width: '450px',
+        width: '450px'
       });
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
@@ -209,7 +210,7 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
 
   cancelPaymentDialog(): void {
     const dialogRef = this.dialog.open(CancelPaymentComponent, {
-      width: '450px',
+      width: '450px'
     });
     dialogRef.afterClosed().subscribe(result => {
       if (this.productId && result) {
@@ -219,6 +220,13 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
           comment: 'Người thắng không thanh toán'
         }));
       }
+    });
+  }
+
+  viewImageDialog(url: string): void {
+    this.dialog.open(ViewImageComponent, {
+      width: '50%',
+      data: url
     });
   }
 

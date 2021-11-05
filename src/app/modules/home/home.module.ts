@@ -39,6 +39,7 @@ import { UpdatePasswordModule } from '../../shared/dialogs/update-password/updat
 import { RequestUpgradeComponent } from './dialogs/request-upgrade/request-upgrade.component';
 import { CancelPaymentComponent } from './dialogs/cancel-payment/cancel-payment.component';
 import { ConfirmBidComponent } from './dialogs/confirm-bid/confirm-bid.component';
+import { ViewImageComponent } from './dialogs/view-image/view-image.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { ConfirmBidComponent } from './dialogs/confirm-bid/confirm-bid.component
     ProfilesComponent,
     RequestUpgradeComponent,
     CancelPaymentComponent,
-    ConfirmBidComponent
+    ConfirmBidComponent,
+    ViewImageComponent
   ],
   imports: [
     CommonModule,
