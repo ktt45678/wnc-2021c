@@ -60,7 +60,7 @@
               </ng-template>
               <ng-template #isAuthor>
                 <div *ngIf="currentUser._id === product.seller._id; else isAdmin">
-                  <div class="my-4">
+                  <div class="mt-4 shadow-sm">
                     <p class="text-center my-2 font-medium">Danh sách người dùng bị từ chối ra giá</p>
                     <div class="overflow-x-auto">
                       <ng-container *ngIf="blacklistDataSource">
@@ -83,7 +83,7 @@
                       </ng-container>
                     </div>
                   </div>
-                  <div class="my-4">
+                  <div class="my-8 shadow-sm">
                     <p class="text-center my-2 font-medium">Danh sách người dùng đã được cho phép ra giá</p>
                     <div class="overflow-x-auto">
                       <ng-container *ngIf="whitelistDataSource">
@@ -106,7 +106,7 @@
                       </ng-container>
                     </div>
                   </div>
-                  <div class="my-4">
+                  <div class="my-8 shadow-sm">
                     <p class="text-center my-2 font-medium">Danh sách người dùng cần phê duyệt để ra giá</p>
                     <div class="overflow-x-auto">
                       <ng-container *ngIf="requestedUsersDataSource">
@@ -142,7 +142,7 @@
                       </ng-container>
                     </div>
                   </div>
-                  <div class="my-4">
+                  <div class="mb-4 shadow-sm">
                     <p class="text-center my-2 font-medium">Danh sách người dùng đã ra giá thành công</p>
                     <div class="overflow-x-auto">
                       <ng-container *ngIf="bidDataSource">

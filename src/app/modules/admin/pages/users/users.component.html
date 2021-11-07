@@ -58,7 +58,7 @@
       <ng-template matMenuContent let-element="element">
         <button (click)="viewUserDialog(element)" mat-menu-item>Xem thông tin</button>
         <button (click)="upgradeUser(element)" [disabled]="!element.requestUpgrade" mat-menu-item>
-          Đông ý nâng cấp
+          Đồng ý nâng cấp
         </button>
         <button (click)="cancelUpgradeUser(element)" [disabled]="!element.requestUpgrade" mat-menu-item>
           Từ chối nâng cấp

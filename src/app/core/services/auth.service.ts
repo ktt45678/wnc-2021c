@@ -31,7 +31,9 @@ export class AuthService {
   }
 
   confirmEmail(id: number, code: string) {
-    return this.http.post<Jwt>('auth/confirm-email', { id, code });
+    return this.http.post<Jwt>('auth/confirm-email', { id, code }).pipe(tap(tokens => {
+      this.startRefreshTokenTimer(tokens.accessToken, tokens.refreshToken);
+    }));
   }
 
   recoverPassword(email: string) {
