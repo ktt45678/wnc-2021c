@@ -12,7 +12,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div class="my-2 aspect-w-1 aspect-h-1"
                 *ngFor="let image of product.images; index as i; trackBy: trackProduct">
-                <img class="object-cover cursor-pointer" [src]="image" [alt]="product.name" loading="lazy"
+                <img class="object-contain cursor-pointer" [src]="image" [alt]="product.name" loading="lazy"
                   (click)="viewImageDialog(image)">
               </div>
             </div>
