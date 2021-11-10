@@ -6,9 +6,9 @@ import { DateTime } from 'luxon';
 })
 export class RelativeTimePipe implements PipeTransform {
 
-  transform(value: string, ...args: string[]): string {
+  transform(value: string, time: string, _?: any): string {
     const date = DateTime.fromISO(value).setLocale('vi-VN');
-    const maxTime = args.shift();
+    const maxTime = time;
     if (maxTime) {
       const diff = date.diffNow().toMillis();
       if (Math.abs(diff) < +maxTime)

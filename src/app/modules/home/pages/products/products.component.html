@@ -10,9 +10,9 @@
         <mat-tab label="Hình ảnh">
           <div class="m-4 p-4 shadow-sm bg-white rounded">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="my-2 aspect-w-1 aspect-h-1"
+              <div class="my-2 aspect-w-1 aspect-h-1 shadow-md"
                 *ngFor="let image of product.images; index as i; trackBy: trackProduct">
-                <img class="object-contain cursor-pointer" [src]="image" [alt]="product.name" loading="lazy"
+                <img class="object-cover cursor-pointer" [src]="image" [alt]="product.name" loading="lazy"
                   (click)="viewImageDialog(image)">
               </div>
             </div>
@@ -182,8 +182,13 @@
                 </div>
               </ng-template>
               <ng-template #blacklisted>
-                <div *ngIf="product.blacklisted; else noRating">
+                <div *ngIf="product.blacklisted; else insufficientPoint">
                   <p>Bạn đã bị người bán từ chối ra giá và không thể tham gia đấu giá nữa</p>
+                </div>
+              </ng-template>
+              <ng-template #insufficientPoint>
+                <div *ngIf="currentUser.ratingCount && currentUser.point < 80; else noRating">
+                  <p>Điểm đánh giá của bạn đang ở dưới 80, bạn không thể tham gia đấu giá</p>
                 </div>
               </ng-template>
               <ng-template #noRating>
@@ -374,12 +379,12 @@
           </mat-card-subtitle>
         </mat-card-header>
         <div class="my-2 aspect-w-1 aspect-h-1">
-          <img class="object-cover block !mx-auto" mat-card-image [src]="product.images[0]" [alt]="product.name"
+          <img class="object-contain block !mx-auto" mat-card-image [src]="product.images[0]" [alt]="product.name"
             loading="lazy">
         </div>
         <mat-card-content>
           <div class="mb-4">
-            <p class="text-3xl">
+            <p class="text-3xl break-all">
               <strong>{{ product.displayPrice | currency:'VND' }}</strong>
             </p>
             <ng-container *ngIf="product.winner">
@@ -391,14 +396,14 @@
               Mua ngay với: <strong>{{ product.buyPrice | currency:'VND' }}</strong>
             </p>
             <p class="text-base">
-              Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong>
+              Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000':pipeTrigger }}</strong>
             </p>
           </div>
           <p class="leading-5">
             Tổng Lượt ra giá: <strong>{{ product.bidCount }}</strong>
           </p>
           <p class="leading-5">
-            Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong>
+            Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000':pipeTrigger }}</strong>
           </p>
           <p class="leading-5">
             Người đăng: <strong>{{ product.seller.fullName }} ({{ product.seller.point }} điểm)</strong>

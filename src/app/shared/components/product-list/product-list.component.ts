@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { interval, Observable } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
 import { cloneDeep } from 'lodash';
 
 import { addToFavorite, removeFromFavorite } from '../../../core/store/favorite';
@@ -19,6 +19,7 @@ import { DestroyService } from '../../../core/services/destroy.service';
 })
 export class ProductListComponent implements OnInit {
   Role = Role;
+  pipeTrigger: boolean = true;
 
   _productList: Product[] = [];
 
@@ -40,6 +41,9 @@ export class ProductListComponent implements OnInit {
     this.user$.pipe(takeUntil(this.destroyService)).subscribe(user => {
       this.user = user;
     });
+    interval(60000).pipe(tap(() => {
+      this.pipeTrigger = !this.pipeTrigger;
+    }), takeUntil(this.destroyService)).subscribe();
   }
 
   onFavorite(product: Product): void {

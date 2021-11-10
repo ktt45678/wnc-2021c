@@ -65,9 +65,14 @@
                 <input type="number" min="1000" max="100000000000" step="1000" formControlName="buyPrice" matInput
                   [disabledControl]="createProductStatus === StoreStatus.LOADING">
                 <span matSuffix>đ</span>
-                <mat-error *ngIf="createProductForm.controls.buyPrice.errors?.min; else buyPriceMax">
+                <mat-error *ngIf="createProductForm.controls.buyPrice.errors?.min; else gteStartingPrice">
                   Giá mua ngay phải <strong>cao hơn đ1,000</strong>
                 </mat-error>
+                <ng-template #gteStartingPrice>
+                  <mat-error *ngIf="createProductForm.controls.buyPrice.errors?.controlGte; else buyPriceMax">
+                    Giá mua ngay phải <strong>cao hơn hoặc bằng giá khởi điểm</strong>
+                  </mat-error>
+                </ng-template>
                 <ng-template #buyPriceMax>
                   <mat-error *ngIf="createProductForm.controls.buyPrice.errors?.max">
                     Giá mua ngay phải <strong>thấp hơn đ100,000,000,000</strong>

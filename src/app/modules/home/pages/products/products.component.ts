@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { interval, Observable } from 'rxjs';
 import { filter, first, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Socket } from 'ngx-socket-io';
 import { cloneDeep } from 'lodash';
@@ -42,6 +42,7 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
   createRatingForm: FormGroup;
   productId?: number;
   minBidPrice: number = 1000;
+  pipeTrigger: boolean = true;
   bidDataSource?: MatTableDataSource<Bid>;
   blacklistDataSource?: MatTableDataSource<User>;
   whitelistDataSource?: MatTableDataSource<User>;
@@ -98,6 +99,9 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
     this.currentUser$.pipe(takeUntil(this.destroyService)).subscribe(currentUser => {
       this.currentUser = currentUser;
     });
+    interval(60000).pipe(tap(() => {
+      this.pipeTrigger = !this.pipeTrigger;
+    }), takeUntil(this.destroyService)).subscribe();
   }
 
   ngAfterContentInit(): void {
@@ -119,7 +123,16 @@ export class ProductsComponent implements OnInit, AfterContentInit, OnDestroy {
           this.blacklistDataSource = new MatTableDataSource(product.blacklist);
           this.whitelistDataSource = new MatTableDataSource(product.whitelist);
           this.requestedUsersDataSource = new MatTableDataSource(product.requestedUsers);
-          this.minBidPrice = !product.winner ? product.startingPrice : product.displayPrice + product.priceStep;
+          if (!product.winner) {
+            this.minBidPrice = product.startingPrice;
+          } else {
+            const estimatedPrice = product.displayPrice + product.priceStep;
+            if (product.buyPrice && estimatedPrice >= product.buyPrice) {
+              this.minBidPrice = product.buyPrice;
+            } else {
+              this.minBidPrice = estimatedPrice;
+            }
+          }
           this.createBidForm.get('price')?.setValidators([Validators.required, Validators.min(this.minBidPrice), Validators.max(100_000_000_000)]);
         }
       }),

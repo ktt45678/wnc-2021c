@@ -15,6 +15,9 @@ module.exports = {
     extend: {
       boxShadow: {
         'border': '0 0 0 1px rgba(0, 0, 0, 0.1)'
+      },
+      maxWidth: {
+        '48': '14rem'
       }
     },
   },

@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { fromEvent, merge, Observable } from 'rxjs';
+import { fromEvent, interval, merge, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, takeUntil, tap } from 'rxjs/operators';
 
 import { DestroyService } from '../../../../core/services/destroy.service';
@@ -22,11 +22,12 @@ import { RemoveProductComponent } from '../../dialogs/remove-product/remove-prod
 })
 export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy {
   StoreStatus = StoreStatus;
+  pipeTrigger: boolean = true;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  displayedColumns: string[] = ['_id', 'name', 'category', 'startingPrice', 'priceStep', 'buyPrice', 'seller', 'expiry', 'actions'];
+  displayedColumns: string[] = ['_id', 'name', 'category', 'displayPrice', 'buyPrice', 'seller', 'expiry', 'actions'];
   productDataSource?: MatTableDataSource<Product>;
   totalProducts?: number;
   defaultSort: Sort = { active: '_id', direction: 'asc' };
@@ -44,6 +45,9 @@ export class ProductsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    interval(60000).pipe(tap(() => {
+      this.pipeTrigger = !this.pipeTrigger;
+    }), takeUntil(this.destroyService)).subscribe();
   }
 
   ngAfterViewInit(): void {

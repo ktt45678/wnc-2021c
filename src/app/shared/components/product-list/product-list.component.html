@@ -8,11 +8,11 @@
     </ng-container>
   </ng-template>
   <ng-template #hasProducts>
-    <div class="grid grid-cols-1 gap-4"
-      [class]="rowSize === 1 ? 'md:grid-cols-1' : rowSize === 4 ? 'md:grid-cols-4' : 'md:grid-cols-5'">
+    <div class="grid grid-cols-1"
+      [class]="rowSize === 1 ? '' : rowSize === 4 ? 'md:grid-cols-2 gap-4 lg:grid-cols-4' : 'md:grid-cols-2 gap-4 lg:grid-cols-5'">
       <ng-container *ngFor="let product of _productList; index as i; trackBy: trackProduct">
-        <mat-card>
-          <a [routerLink]="['/home', 'products', product._id]">
+        <mat-card class="!flex flex-col">
+          <a [routerLink]="['/home', 'products', product._id]" class="flex-grow">
             <mat-card-header class="overflow-hidden">
               <mat-card-title class="leading-7 h-14 overflow-hidden">{{ product.name }}
               </mat-card-title>
@@ -24,8 +24,8 @@
                 loading="lazy">
             </div>
             <mat-card-content>
-              <div class="mb-4 h-24">
-                <p class="text-2xl">
+              <div class="mb-4">
+                <p class="text-2xl break-all">
                   <strong>{{ product.displayPrice | currency:'VND' }}</strong>
                 </p>
                 <ng-container *ngIf="product.winner">
@@ -37,14 +37,14 @@
                   Mua ngay với: <strong>{{ product.buyPrice | currency:'VND' }}</strong>
                 </p>
                 <p class="text-base">
-                  Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000' }}</strong>
+                  Hết hạn: <strong>{{ product.expiry | relativeTime:'259200000':pipeTrigger }}</strong>
                 </p>
               </div>
               <p class="leading-5">
                 Tổng lượt ra giá: <strong>{{ product.bidCount }}</strong>
               </p>
               <p class="leading-5">
-                Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000' }}</strong>
+                Đã đăng: <strong>{{ product.createdAt | relativeTime:'259200000':pipeTrigger }}</strong>
               </p>
             </mat-card-content>
           </a>

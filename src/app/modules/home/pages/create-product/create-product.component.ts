@@ -9,6 +9,7 @@ import { StoreStatus } from '../../../../core/enums/store-status.enum';
 import { AppState } from '../../../../core/store';
 import { CategoryGroup } from '../../../../core/models';
 import { createProduct } from '../../../../core/store/product';
+import { controlGte } from '../../../../core/validators/control-gte.validator';
 import { DestroyService } from '../../../../core/services/destroy.service';
 
 @Component({
@@ -37,6 +38,8 @@ export class CreateProductComponent implements OnInit {
       expiry: new FormControl('', [Validators.required]),
       imageInput: new FormControl('', [Validators.required]),
       images: new FormControl([], [Validators.required])
+    }, {
+      validators: controlGte('buyPrice', 'startingPrice')
     });
     this.createProductStatus$ = store.select(state => state.product.createProductStatus);
     this.categoryGroups$ = store.select(state => state.category.categoryGroups);
@@ -46,9 +49,6 @@ export class CreateProductComponent implements OnInit {
     this.createProductStatus$.pipe(takeUntil(this.destroyService)).subscribe(status => {
       if (status === StoreStatus.SUCCESS) {
         this.createProductForm.reset();
-        Object.keys(this.createProductForm.controls).forEach(key => {
-          this.createProductForm.get(key)?.setErrors(null);
-        });
         this.createProductForm.patchValue({
           autoRenew: false,
           images: []
