@@ -5,6 +5,7 @@ import { ReactiveComponentModule } from '@ngrx/component';
 import { QuillModule } from 'ngx-quill'
 import { SocketIoModule } from 'ngx-socket-io';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCarouselModule } from '@ngbmodule/material-carousel';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -69,6 +70,7 @@ import { ViewImageComponent } from './dialogs/view-image/view-image.component';
     UpdateInfoModule,
     UpdateEmailModule,
     UpdatePasswordModule,
+    MatCarouselModule,
     MatIconModule,
     MatButtonModule,
     MatSlideToggleModule,

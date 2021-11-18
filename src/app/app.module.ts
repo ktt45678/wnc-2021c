@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { QuillModule } from 'ngx-quill'
+import { MatCarouselModule } from '@ngbmodule/material-carousel';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { StoreModule } from '@ngrx/store';
@@ -34,6 +35,7 @@ import { AuthService } from './core/services/auth.service';
     BrowserAnimationsModule,
     HttpClientModule,
     QuillModule.forRoot(),
+    MatCarouselModule.forRoot(),
     MatNativeDateModule,
     MatSnackBarModule,
     StoreModule.forRoot(reducers),

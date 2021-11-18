@@ -29,6 +29,8 @@ export class ProductListComponent implements OnInit {
   }
   @Input() rowSize: number = 5;
   @Input() transparent: boolean = false;
+  @Input() showWinning: boolean = false;
+  @Input() userId?: number;
 
   user$: Observable<User | null>;
   user?: User | null;

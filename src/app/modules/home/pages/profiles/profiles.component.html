@@ -89,7 +89,8 @@
               <div class="p-0 md:p-8">
                 <div class="my-4" *ngrxLet="biddedProducts$ as biddedProducts">
                   <app-product-list [productList]="biddedProducts.results"
-                    [loading]="findBiddedProductsStatus === StoreStatus.LOADING" [rowSize]="4">
+                    [loading]="findBiddedProductsStatus === StoreStatus.LOADING" [rowSize]="4" [showWinning]="true"
+                    [userId]="currentUser?._id">
                   </app-product-list>
                   <mat-paginator #biddedPaginator [length]="biddedProducts.totalResults" [pageSize]="10"
                     [pageSizeOptions]="[5, 10, 15, 30]">
@@ -131,7 +132,7 @@
             </div>
           </ng-container>
         </mat-tab>
-        <mat-tab label="Đã bán">
+        <mat-tab label="Bán hàng">
           <div class="container mx-auto">
             <div class="px-4 mx-4 my-14">
               <ng-container *ngrxLet="findSaleProductsStatus$ as findSaleProductsStatus">
