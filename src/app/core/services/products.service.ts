@@ -18,7 +18,7 @@ export class ProductsService {
     formData.append('startingPrice', startingPrice.toString());
     formData.append('priceStep', priceStep.toString());
     formData.append('autoRenew', autoRenew.toString());
-    formData.append('expiry', expiry.toString());
+    formData.append('expiry', (new Date(expiry)).toJSON());
     images.forEach(image => {
       formData.append('images', image);
     });
